@@ -1,0 +1,7 @@
+---
+
+- hosts: all
+  sudo: yes
+  vars_files: ["{{ htpc_vars_file }}"]
+  roles:
+    - { role: baserole, tags: baserole }
