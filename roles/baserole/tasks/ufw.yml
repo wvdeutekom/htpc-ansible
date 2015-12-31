@@ -1,0 +1,17 @@
+--- 
+# roles/baserole/tasks/ufw.yml
+
+- name: remove firewalld package
+  apt: pkg=firewalld state=absent
+
+- name: install ufw package
+  apt: pkg=ufw state=present
+
+- name: allow openssh tcp
+  ufw: rule=allow name=OpenSSH
+
+- name: enable ufw (deny)
+  ufw: state=enabled policy=deny
+
+- name: enable ufw logging
+  ufw: logging=on

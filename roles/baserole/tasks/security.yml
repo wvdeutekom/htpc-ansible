@@ -1,0 +1,5 @@
+---
+- template: src=jail.conf.j2 dest=/etc/fail2ban/jail.conf owner=root group=root mode=0644
+
+- include: ufw.yml
+#todo: switch to csf? Has a great config file :)

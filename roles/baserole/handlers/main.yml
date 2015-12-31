@@ -1,0 +1,20 @@
+---
+- name: restart ssh
+  # Using command here as "service:" fails often and silently.
+  command: service ssh restart
+- name: reload monit configuration
+  service: name=monit state=reloaded
+- name: reload firewalld configuration
+  service: name=firewalld state=reloaded
+- name: update tzdata
+  command: /usr/sbin/dpkg-reconfigure --frontend noninteractive tzdata
+- name: restart postfix
+  service: name=postfix state=restarted enabled=yes
+- name: restart lldpd
+  service: name=lldpd state=restarted enabled=yes
+- name: update aliases
+  command: /usr/bin/newaliases
+- name: restart collectd
+  service: name=collectd state=restarted enabled=yes
+- name: restart datadog
+  action: service name=datadog-agent state=restarted

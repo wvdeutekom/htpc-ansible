@@ -46,3 +46,6 @@
 
 - name: Ensure monit is running
   service: name=monit state=started enabled=yes
+
+- name: Ensure ntp is running
+  service: name=ntp state=started

@@ -1,0 +1,26 @@
+---
+- name: SSH folder voor root
+  file: path="~/.ssh" state=directory
+
+- name: SSH Authorized_keys voor root
+  copy: src=authorized_keys dest=~/.ssh/authorized_keys
+
+- copy: src=sshd_config dest=/etc/ssh/sshd_config
+  notify:
+  - restart ssh
+
+- copy: src=sudoers dest=/etc/sudoers
+  tags: sudo
+
+- group: name=admin system=yes
+
+- user: name=wijnand comment="Wijnand User" uid=1040 password={{ encrypted_ssh_password }} shell="/bin/bash" state=present groups=admin append=yes
+
+- name: SSH folder voor wijnand
+  file: path="/home/wijnand/.ssh" state=directory group="wijnand" owner="wijnand" mode="0700"
+
+- name: SSH Authorized_keys voor wijnand
+  copy: src=authorized_keys dest=/home/wijnand/.ssh/authorized_keys  group="wijnand" owner="wijnand" mode="0600"
+
+- name: Enable SSHD
+  service: name=ssh enabled=yes

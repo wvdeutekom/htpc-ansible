@@ -1,2 +1,6 @@
 ---
 - include: basepackages.yml
+- include: ssh.yml
+- include: host.yml
+- include: security.yml
+

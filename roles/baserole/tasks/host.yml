@@ -1,0 +1,6 @@
+---
+- name: set /etc/hosts based on inventory name
+  template: src=hosts.j2 dest=/etc/hosts owner=root group=root mode=0644
+
+- name: Set hostname to inventory name
+  hostname: name={{ inventory_hostname }}
