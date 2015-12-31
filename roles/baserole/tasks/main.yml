@@ -3,4 +3,7 @@
 - include: ssh.yml
 - include: host.yml
 - include: security.yml
-
+- include: apt.yml
+- include: timezone.yml
+- include: postfix.yml
+- include: logrotate.yml

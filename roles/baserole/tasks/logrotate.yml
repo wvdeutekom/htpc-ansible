@@ -1,0 +1,2 @@
+---
+- copy: src=rsyslog.logrotate dest=/etc/logrotate.d/rsyslog owner=root group=root mode=0644

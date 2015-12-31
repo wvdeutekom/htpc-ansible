@@ -1,0 +1,14 @@
+---
+- name: set /etc/localtime to UTC
+  file: src=/usr/share/zoneinfo/Universal dest=/etc/localtime state=link force=yes
+
+- name: set /etc/timezone to UTC
+  copy: 
+   content: |
+     Etc/UTC
+   dest: /etc/timezone
+  notify: update tzdata
+
+#- name: set /etc/timezone to UTC
+#  copy: src=timezone dest=/etc/timezone
+#  notify: update tzdata

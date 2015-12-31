@@ -1,0 +1,8 @@
+---
+- template: src=postfix_main.j2 dest=/etc/postfix/main.cf mode=0644 group=postfix
+  notify: restart postfix
+
+- copy: src=aliases dest=/etc/aliases mode=0644 group=root owner=root
+  notify: update aliases
+
+- service: name=postfix state=started enabled=yes

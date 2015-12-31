@@ -1,0 +1,4 @@
+# See man 5 aliases for format
+postmaster: root@vdeute.com
+wijnand:    devops@vdeute.com
+root:       devops@vdeute.com

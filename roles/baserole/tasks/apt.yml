@@ -1,0 +1,19 @@
+---
+
+- name: Place unattended upgrades config (sifter 3580)
+  template: >
+      src=unattended-upgrades.j2 dest=/etc/apt/apt.conf.d/50unattended-upgrades
+      owner=root group=root mode=0644
+  tags: unattended
+
+- name: Enable automatic updates
+  copy: src=10periodic dest=/etc/apt/apt.conf.d/10periodic
+        owner=root group=root mode=0644
+  tags: unattended
+
+- name: install reboot required check
+  copy: src=check_reboot_needed dest=/opt/check_reboot_needed owner=root mode=755
+  tags: unattended
+
+- cron: name="check_reboot_needed" hour="8" minute="12" user="root" job="chronic /opt/check_reboot_needed" state=present
+  tags: unattended
