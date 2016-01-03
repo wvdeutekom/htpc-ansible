@@ -3,7 +3,7 @@
 
 - copy: src=rcS dest=/etc/default/rcS mode=0644 owner=root group=root
 
-- copy: src=apt.conf dest=/etc/apt/apt.conf owner=root group=root mode=0644
+- file: path=/etc/apt/apt.conf state=touch owner=root group=root mode=0644
 
 - name: install base packages for the system
   apt: pkg={{ item }} state=present update_cache=yes
