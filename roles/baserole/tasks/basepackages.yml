@@ -1,9 +1,8 @@
 ---
 - template: src=mailname.j2 dest=/etc/mailname mode=0644
 
-- copy: src=rcS dest=/etc/default/rcS mode=0644 owner=root group=root
-
 - file: path=/etc/apt/apt.conf state=touch owner=root group=root mode=0644
+  changed_when: False
 
 - name: install base packages for the system
   apt: pkg={{ item }} state=present update_cache=yes

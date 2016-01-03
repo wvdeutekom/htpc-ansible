@@ -102,7 +102,7 @@ set mailserver localhost
 ## are expanded at runtime. For example, to override the sender, use:
 #
 # set mail-format { from: monit@foo.bar }
-set mail-format { from: {{ monit_mailfrom_address }} }
+set mail-format { from: {{ system_mailfrom_address }} }
 
 #
 ## You can set alert recipients whom will receive alerts if/when a
@@ -112,7 +112,7 @@ set mail-format { from: {{ monit_mailfrom_address }} }
 # set alert sysadm@foo.bar                       # receive all alerts
 ## Do not alert when Monit start,stop or perform a user initiated action
 # set alert manager@foo.bar not on { instance, action }
-set alert {{ monit_mailto_address }} not on { pid, ppid, action, instance }
+set alert {{ system_mailto_address }} not on { pid, ppid, action, instance }
 
 #
 ## Monit has an embedded web server which can be used to view status of

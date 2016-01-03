@@ -2,6 +2,12 @@
 
 - hosts: all
   sudo: yes
-  vars_files: ["{{ htpc_vars_file }}"]
+  vars_files: ["{{ vars_file }}"]
+  roles:
+    - { role: baserole, tags: baserole }
+
+- hosts: htpc
+  sudo: yes
+  vars_files: ["{{ vars_file }}"]
   roles:
     - { role: baserole, tags: baserole }
