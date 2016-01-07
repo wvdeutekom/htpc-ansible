@@ -1,12 +1,19 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+#install vagrant-proxyconf first using the following in your terminal: 'vagrant plugin install vagrant-proxyconf'
+unless Vagrant.has_plugin?("vagrant-proxyconf")
+  raise 'vagrant-proxyconf is not installed!'
+end
+
 Vagrant.configure('2') do |config|
   config.vm.box = "trusty"
   config.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
   config.ssh.forward_agent = true
   #config.ssh.insert_key = false
   config.vm.synced_folder ".", "/vagrant", disabled: true
+  config.apt_proxy.http  = "http://10.0.2.2:8080/"
+  config.apt_proxy.https = "http://10.0.2.2:8080/"
 
   config.vm.provider "virtualbox" do |vb|
     vb.customize ["modifyvm", :id, "--natdnsproxy1", "off"]
@@ -14,9 +21,9 @@ Vagrant.configure('2') do |config|
     vb.customize ["modifyvm", :id, "--memory", "512"]
   end
 
-  config.vm.define "v-htpc", autostart: false do |machine|
-    machine.vm.hostname = "v-htpc"
-    machine.vm.network :private_network, ip:"172.28.128.127"
+  config.vm.define "vagrant-htpc", autostart: false do |machine|
+    machine.vm.hostname = "vagrant-htpc"
+    machine.vm.network :private_network, ip:"172.28.128.128"
 
   end
 
@@ -33,7 +40,7 @@ Vagrant.configure('2') do |config|
     }
 
     ansible.groups = {
-      "htpc" => %w(v-htpc),
+      "htpc" => %w(vagrant-htpc),
     }
 
   end

@@ -1,2 +1,3 @@
 ---
 vars_file: mock_variables.yml
+htpc_environment: development

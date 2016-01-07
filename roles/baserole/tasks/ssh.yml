@@ -14,7 +14,7 @@
 
 - group: name=admin system=yes
 
-- user: name=wijnand comment="Wijnand User" uid=1040 password={{ encrypted_ssh_password }} shell="/bin/bash" state=present groups=admin append=yes
+- user: name=wijnand comment="Wijnand User" uid=1040 password={{ encrypted_ssh_password }} shell="/bin/bash" state=present groups=admin append=yes generate_ssh_key=yes ssh_key_file="/home/wijnand/.ssh/id_rsa" ssh_key_type=rsa
 
 - name: SSH folder voor wijnand
   file: path="/home/wijnand/.ssh" state=directory group="wijnand" owner="wijnand" mode="0700"

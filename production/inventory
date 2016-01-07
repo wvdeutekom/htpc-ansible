@@ -1,0 +1,2 @@
+[mediacenter]
+htpc ansible_ssh_host=172.28.128.127 ansible_ssh_user=wijnand TTY=ttyS0 firewall=ufw

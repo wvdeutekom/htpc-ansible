@@ -1,0 +1,34 @@
+---
+# roles/ufw/tasks/main.yml
+
+- name: Install ufw
+  apt: pkg=ufw state=present
+
+- name: Allow ssh from everywhere.
+  ufw: rule=allow name=OpenSSH
+  tags:
+    - firewall
+
+- name: Setting /etc/default/ufw
+  copy: src=default_ufw dest=/etc/default/ufw owner=root group=root mode=0644
+  notify:
+    - reload ufw
+  tags:
+    - config
+    - ufw
+
+- name: Setting /etc/ufw/before.rules
+  template: src=before.rules.j2 dest=/etc/ufw/before.rules owner=root group=root mode=0640
+  notify:
+    - restart ufw
+  tags:
+    - config
+    - ufw
+
+- name: Setting /etc/ufw/sysctl.conf
+  copy: src=ufw_sysctl.conf dest=/etc/ufw/sysctl.conf owner=root group=root mode=0644
+  notify:
+    - reload ufw
+  tags:
+    - config
+    - ufw

@@ -11,3 +11,4 @@
   vars_files: ["{{ vars_file }}"]
   roles:
     - { role: baserole, tags: baserole }
+    - { role: ufw, tags: ufw }

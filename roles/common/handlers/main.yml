@@ -1,0 +1,16 @@
+---
+# roles/ufw/handlers/main.yml
+
+- name: reload ufw
+  # There is no reload. Only disable && enable
+  ufw: state=disabled
+  notify: enable ufw
+
+- name: restart ufw
+  service: name=ufw state=restarted enabled=yes
+
+- name: disable ufw
+  ufw: state=disabled
+
+- name: enable ufw
+  ufw: state=enabled

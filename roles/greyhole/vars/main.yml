@@ -1,0 +1,6 @@
+---
+db_name: greyhole
+db_user: greyhole_user
+db_pass: 89y63jdwe
+
+mount_path: /mnt/disks
