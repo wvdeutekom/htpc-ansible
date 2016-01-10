@@ -1,0 +1,4 @@
+---
+- apt: name=python-pip state=present
+
+- pip: name=docker-py state=present version=1.2.3

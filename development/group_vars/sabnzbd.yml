@@ -1,0 +1,10 @@
+---
+
+
+
+# Sonarr
+sonarr_containername: sonarr
+sonarr_imagename: latest
+sonarr_hub_repository: sonarr
+sonarr_ports: 8989:8989
+sonarr_datadir: /home/wijnand/docker/dockerspace/sonarr

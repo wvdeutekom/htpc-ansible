@@ -1,0 +1,23 @@
+---
+
+- name: Create sabnzbd config dir
+  file: path=/home/wijnand/docker/dockerspace/sabnzbd/sabnzbd.ini state=directory owner=wijnand group=wijnand
+
+- name: Copy sabnzbd config file
+  template: src=sabnzbd.ini.j2 dest=/home/wijnand/docker/dockerspace/sabnzbd/sabnzbd.ini
+
+- name: start sabnzbd container
+  sudo: no
+  tags: sabnzbd
+  docker: 
+    name: sabnzbd
+    privileged: yes
+    image: "{{ hub_username }}/{{ sab_hub_repository }}"
+    state: reloaded
+    pull: missing
+    ports:
+    - "{{ sab_ports }}"
+    volumes:
+    - "{{ sab_downloaddir }}{{ ':' }}/data/downloads"
+    - "{{ sab_datadir }}{{ ':' }}/data/sabnzbd"
+    - "{{ sab_nzbbackupdir }}{{ ':' }}/data/nzb"

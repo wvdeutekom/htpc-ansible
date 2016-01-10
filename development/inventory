@@ -1,2 +1,2 @@
 [htpc]
-vagrant-htpc ansible_ssh_host=172.28.128.128 TTY=ttyS0 ansible_ssh_user=wijnand
+vagrant-htpc ansible_ssh_host=wijnand@172.28.128.128 TTY=ttyS0 ansible_ssh_user=wijnand

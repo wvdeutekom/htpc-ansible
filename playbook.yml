@@ -1,14 +1,11 @@
 ---
-
-- hosts: all
-  sudo: yes
-  vars_files: ["{{ vars_file }}"]
-  roles:
-    - { role: baserole, tags: baserole }
-
 - hosts: htpc
   sudo: yes
   vars_files: ["{{ vars_file }}"]
   roles:
     - { role: baserole, tags: baserole }
     - { role: ufw, tags: ufw }
+    - { role: greyhole, tags: greyhole }
+    - { role: docker, docker-py: yes, tags: docker }
+    - { role: sabnzbd, tags: sabnzbd }
+    - { role: sonarr, tags: sonarr }

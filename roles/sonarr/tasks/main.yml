@@ -1,0 +1,17 @@
+---
+
+- name: start sonarr container
+  sudo: no
+  docker: 
+    name: sonarr
+    image: "{{ hub_username }}/{{ sonarr_hub_repository }}"
+    state: reloaded
+    pull: missing
+    ports:
+    - "{{ sonarr_ports }}"
+    volumes:
+    - "{{ mnt_series }}{{ ':' }}/volumes/media"
+    - "{{ sonarr_datadir }}{{ ':' }}/volumes/config"
+    - "{{ sab_downloaddir }}{{ ':' }}/volumes/completed"
+    links:
+    - "{{ sab_containername }}{{ ':' }}sabnzbd"

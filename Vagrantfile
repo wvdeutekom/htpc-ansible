@@ -18,7 +18,7 @@ Vagrant.configure('2') do |config|
   config.vm.provider "virtualbox" do |vb|
     vb.customize ["modifyvm", :id, "--natdnsproxy1", "off"]
     vb.customize ["modifyvm", :id, "--natdnshostresolver1", "off"]
-    vb.customize ["modifyvm", :id, "--memory", "512"]
+    vb.customize ["modifyvm", :id, "--memory", "2048"]
   end
 
   config.vm.define "vagrant-htpc", autostart: false do |machine|

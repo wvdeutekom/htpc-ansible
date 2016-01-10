@@ -100,10 +100,10 @@
 #	storage_pool_drive = /mnt/hdd1/gh, min_free: 10gb
 #	storage_pool_drive = /mnt/hdd2/gh, min_free: 10gb
 #	storage_pool_drive = /mnt/hdd3/gh, min_free: 10gb
-	storage_pool_drive = /mnt/hdd1/gh, min_free: 10gb
-	storage_pool_drive = /mnt/hdd2/gh, min_free: 10gb
-	storage_pool_drive = /mnt/hdd3/gh, min_free: 10gb
-	storage_pool_drive = /mnt/hdd4/gh, min_free: 10gb
+{% for drive in storage_pool_drives  %}
+	storage_pool_drive = {{ drive }}, min_free: 10gb
+{% endfor %}
+
 
 # The following can help you test Greyhole by defining multiple storage_pool_drive 
 # that are in fact just empty directories on the same drive.

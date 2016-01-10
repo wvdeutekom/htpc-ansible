@@ -1,16 +1,9 @@
 ---
-vars_file: mock_variables.yml
-htpc_environment: development
-
-# General docker
-mnt_series: /mnt/samba/Series
-
+# Sabnzbd
 sab_containername: sabnzbd
 sab_imagename: latest
 sab_hub_repository: sabnzbd
 sab_ports: 8080:8080
 
-sab_downloaddir: /mnt/hdd1/sabnzbd
 sab_datadir: /home/wijnand/docker/dockerspace/sabnzbd
 sab_nzbbackupdir: /home/wijnand/Downloads/sabnzbd/nzb
-

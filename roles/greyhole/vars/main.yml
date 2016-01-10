@@ -4,3 +4,9 @@ db_user: greyhole_user
 db_pass: 89y63jdwe
 
 mount_path: /mnt/disks
+
+storage_pool_drives:
+  - /mnt/hdd1/gh
+  - /mnt/hdd2/gh
+  - /mnt/hdd3/gh
+  - /mnt/hdd4/gh

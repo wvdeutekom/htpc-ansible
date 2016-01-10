@@ -14,3 +14,7 @@
 
 - name: enable ufw
   ufw: state=enabled
+
+- name: reload monit configuration
+  service: name=monit state=reloaded
+

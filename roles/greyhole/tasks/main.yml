@@ -2,7 +2,7 @@
 - name: Mount drives
   file: path={{ mount_path }}/{{ item }} state=directory
     owner=root group=root
-  with_items: {{ ansible_devices }}
+  with_items: "{{ storage_pool_drives }}"
 
 - apt_repository: repo='deb http://www.greyhole.net/releases/deb stable main' state=present
 - apt_key: url=http://www.greyhole.net/releases/deb/greyhole-debsig.asc state=present
@@ -36,3 +36,6 @@
 - name: Copy greyhole.conf
   template: src=greyhole.conf.j2 dest=/etc/greyhole.conf
     owner=root group=root mode=0644
+
+- copy: src=greyhole.monit dest=/etc/monit/conf.d/greyhole.conf
+  notify: reload monit configuration  
