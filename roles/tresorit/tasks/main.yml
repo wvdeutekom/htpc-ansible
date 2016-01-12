@@ -1,0 +1,17 @@
+- name: Download tresorit
+  get_url:
+    url: https://installerstorage.blob.core.windows.net/public/install/tresorit_installer.run
+    dest: /tmp/tresorit_install.run
+    force: no
+    owner: wijnand
+    group: wijnand
+
+- file: path=/tmp/tresorit_install.run state=file mode="0755"
+
+- file: path=/home/wijnand/.local/share/tresorit/tresorit/ state=directory mode=0755 owner=wijnand group=wijnand
+
+- name: Install tresorit
+  shell: yes | /tmp/tresorit_install.run
+  become: yes
+  become_user: wijnand
+
