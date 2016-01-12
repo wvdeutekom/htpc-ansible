@@ -3,9 +3,12 @@
 - name: Create sonarr config dir
   file: path=/home/wijnand/docker/dockerspace/sonarr/ state=directory owner=nobody group=nogroup
 
+- name: Copy sonarr config
+  template: src=config.xml.j2 dest=/home/wijnand/docker/dockerspace/sonarr/sonarr/config.xml owner=nobody group=nogroup
+
 - name: start sonarr container
   sudo: no
-  docker: 
+  docker:
     name: sonarr
     image: "{{ hub_username }}/{{ sonarr_hub_repository }}"
     state: reloaded

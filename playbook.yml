@@ -9,3 +9,4 @@
     - { role: docker, docker-py: yes, tags: docker }
     - { role: sabnzbd, tags: sabnzbd }
     - { role: sonarr, tags: sonarr }
+    - { role: plexmediaserver, tags: plexmediaserver }

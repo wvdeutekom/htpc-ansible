@@ -4,5 +4,8 @@ sonarr_containername: sonarr
 sonarr_imagename: latest
 sonarr_hub_repository: sonarr
 sonarr_ports: 8081:8081
+sonarr_ports: "8989:8989"
 sonarr_destdir: /mnt/samba/Series
 sonarr_datadir: /home/wijnand/docker/dockerspace/sonarr
+sonarr_port_internal: 8989
+sonarr_port_external: 8989

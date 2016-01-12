@@ -1,0 +1,35 @@
+---
+# Dependencies
+- name: Ensure plex dependencies are installed
+  action: apt pkg={{ item }} state=present
+  register: result
+  with_items:
+    - libavahi-common3
+    - libavahi-core7
+    - libdaemon0
+    - libnss-mdns
+    - libavahi-client3
+    - libavahi-common3
+    - avahi-daemon
+    - avahi-utils
+  ignore_errors: yes
+- name: Running apt-get -f install to fix any potential problems the last command had
+  command: apt-get -f install
+  when: result|failed
+
+# Install
+- name: Download plex .deb
+  get_url: url={{ plex_download }} dest={{ plex_deb_path }}
+  ignore_errors: yes
+- name: Check if plex is installed
+  command: "dpkg -s plexmediaserver"
+  register: result
+  changed_when: False
+  ignore_errors: yes
+- name: Installing plex
+  command: "dpkg -i {{ plex_deb_path }}"
+  when: result|failed
+
+# Start it
+- name: Ensure plex is running
+  service: name=plexmediaserver state=started
