@@ -5,6 +5,7 @@
   roles:
     - { role: baserole, tags: baserole }
     - { role: ufw, tags: ufw }
+    - { role: vnc, tags: vnc }
     - { role: greyhole, tags: greyhole }
     - { role: docker, docker-py: yes, tags: docker }
     - { role: sabnzbd, tags: sabnzbd }

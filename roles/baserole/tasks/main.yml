@@ -1,5 +1,6 @@
 ---
 - include: mounts.yml
+  tags: mounts
 - include: apt.yml
 - include: basepackages.yml
 - include: ssh.yml

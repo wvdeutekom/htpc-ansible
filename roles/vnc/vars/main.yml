@@ -1,0 +1,4 @@
+---
+vnc_client_res: "1024x600"
+vnc_users:
+  - { name: 'wijnand', vnc_num: 1 }

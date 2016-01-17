@@ -1,3 +1,5 @@
 ---
-
 - include: ../../common/handlers/main.yml
+
+- name: restart samba
+  service: name=samba state=restarted

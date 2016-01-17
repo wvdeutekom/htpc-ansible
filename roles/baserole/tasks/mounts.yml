@@ -4,13 +4,13 @@
 #- mount: name=/ src='03dd19af-e89c-4123-a92b-48df1fbe6aac' fstype=ext4 opts='errors=remount-ro' state=present dump=0 pass=1
 
 - name: mount /mnt/hdd1 disk
-  mount: name=/mnt/hdd1 src='UUID=DEEAD86FEAD84585' fstype=ntfs-3g opts=rw,user state=present
+  mount: name=/mnt/hdd1 src='UUID=DEEAD86FEAD84585' fstype=ntfs-3g opts=rw,user,nosuid,nodev state=present
 
 - name: mount /mnt/hdd2 disk
-  mount: name=/mnt/hdd2 src='UUID=0A1AFDFF1AFDE799' fstype=ntfs-3g opts=rw,user state=present
+  mount: name=/mnt/hdd2 src='UUID=0A1AFDFF1AFDE799' fstype=ntfs-3g opts=rw,user,nosuid,nodev state=present
 
 - name: mount /mnt/hdd3 disk
-  mount: name=/mnt/hdd3 src='UUID=24FC20B6FC208460' fstype=ntfs-3g opts=rw,user state=present
+  mount: name=/mnt/hdd3 src='UUID=24FC20B6FC208460' fstype=ntfs-3g opts=rw,user,nosuid,nodev state=present
 
 - name: mount /mnt/hdd4 disk
   mount: name=/mnt/hdd4 src='UUID=361432ae-75d9-4435-bd9b-ba3df8b636c8' fstype=ext4 opts=noatime,data='writeback,nofail' state=present

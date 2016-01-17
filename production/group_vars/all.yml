@@ -2,6 +2,8 @@
 vars_file: mock_variables.yml
 htpc_environment: production
 
+ubuntu_user: wijnand
+
 # General docker
 mnt_series: /mnt/samba/Series
 
