@@ -9,7 +9,9 @@ mnt_series: /mnt/samba/Series
 sab_containername: sabnzbd
 sab_imagename: latest
 sab_hub_repository: sabnzbd
-sab_ports: 8080:8080
+sonarr_ports: "{{ sab_port_external }}{{ ':' }}{{ sab_port_internal }}"
+sab_port_internal: 8080
+sab_port_external: 8080
 
 sab_downloaddir: /mnt/hdd1/sabnzbd
 sab_datadir: /home/wijnand/docker/dockerspace/sabnzbd

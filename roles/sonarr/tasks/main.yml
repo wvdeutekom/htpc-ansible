@@ -1,7 +1,7 @@
 ---
 
 - name: Create sonarr config dir
-  file: path=/home/wijnand/docker/dockerspace/sonarr/ state=directory owner=nobody group=nogroup
+  file: path=/home/wijnand/docker/dockerspace/sonarr/sonarr/ state=directory owner=nobody group=nogroup
 
 - name: Copy sonarr config
   template: src=config.xml.j2 dest=/home/wijnand/docker/dockerspace/sonarr/sonarr/config.xml owner=nobody group=nogroup
@@ -21,3 +21,8 @@
     - "{{ sab_downloaddir }}{{ ':' }}/volumes/completed"
     links:
     - "{{ sab_containername }}{{ ':' }}sabnzbd"
+
+
+- name: Ufw open sonarr port
+  ufw: rule=allow port={{ sonarr_port_external }} proto=tcp 
+

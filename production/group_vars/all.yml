@@ -1,3 +1,34 @@
 ---
 vars_file: mock_variables.yml
 htpc_environment: production
+
+# General docker
+mnt_series: /mnt/samba/Series
+
+# Sabnzbd
+sab_containername: sabnzbd
+sab_imagename: latest
+sab_hub_repository: sabnzbd
+sonarr_ports: "{{ sab_port_external }}{{ ':' }}{{ sab_port_internal }}"
+sab_port_internal: 8080
+sab_port_external: 8080
+
+sab_downloaddir: /mnt/hdd1/sabnzbd
+sab_datadir: /home/wijnand/docker/dockerspace/sabnzbd
+sab_nzbbackupdir: /home/wijnand/Downloads/sabnzbd/nzb
+
+# Sonarr
+sonarr_containername: sonarr
+sonarr_imagename: latest
+sonarr_hub_repository: sonarr
+sonarr_ports: "{{ sonarr_port_external }}{{ ':' }}{{ sonarr_port_internal }}"
+sonarr_destdir: /mnt/samba/Series
+sonarr_datadir: /home/wijnand/docker/dockerspace/sonarr
+sonarr_port_internal: 8989
+sonarr_port_external: 8989
+
+# Plexmediaserver
+plex_download: "https://plex.tv/downloads/latest/1?channel=16&build=linux-ubuntu-x86_64&distro=ubuntu&X-Plex-Token={{ plex_token }}"
+plex_deb_path: /tmp/plexmediaserver.deb
+plex_application_support_dir: "/var/lib/plexmediaserver/Library/Application Support/Plex Media Server"
+

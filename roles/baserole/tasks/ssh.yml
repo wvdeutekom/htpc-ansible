@@ -8,13 +8,14 @@
 - copy: src=sshd_config dest=/etc/ssh/sshd_config
   notify:
   - restart ssh
+  tags: blaat
 
 - copy: src=sudoers dest=/etc/sudoers
   tags: sudo
 
 - group: name=admin system=yes
 
-- user: name=wijnand comment="Wijnand User" uid=1040 password={{ encrypted_ssh_password }} shell="/bin/bash" state=present groups=admin append=yes generate_ssh_key=yes ssh_key_file="/home/wijnand/.ssh/id_rsa" ssh_key_type=rsa
+- user: name=wijnand comment="Wijnand" uid=1109 password={{ encrypted_ssh_password }} shell="/bin/bash" state=present group=admin append=yes generate_ssh_key=yes ssh_key_file="/home/wijnand/.ssh/id_rsa" ssh_key_type=rsa update_password=always
 
 - name: SSH folder voor wijnand
   file: path="/home/wijnand/.ssh" state=directory group="wijnand" owner="wijnand" mode="0700"

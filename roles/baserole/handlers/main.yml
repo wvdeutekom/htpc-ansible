@@ -1,7 +1,6 @@
 ---
 - name: restart ssh
-  # Using command here as "service:" fails often and silently.
-  command: service ssh restart
+  service: name=ssh state=restarted
 - name: reload monit configuration
   service: name=monit state=reloaded
 - name: reload firewalld configuration
