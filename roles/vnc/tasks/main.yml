@@ -2,35 +2,11 @@
 - name: Install the GUI and VNC Packages
   apt: pkg={{ item }} state=installed update_cache=true
   with_items:
-    - gnome-core 
-    - vnc4server
+    - x11vnc
 
-- name: Copy the defult password file
-  template: src=password.j2 dest=/tmp/file 
+- shell: "sudo x11vnc -storepasswd {{ vnc_password }} /etc/x11vnc.pass"
 
-- name: vncserver command
-  shell: sudo -u {{ item.name }} -i vncserver </tmp/file >/tmp/vncpasswd.1 2>/tmp/vncpasswd.2
-  with_items:
-   vnc_users
-
-- name: Copy the vncservers.conf file in /etc/ directory
-  template: src=vncservers.conf.j2 dest=/etc/vncservers.conf owner=root group=root
-
-- name: Copy the modified "xstartup" file
-  template: src=xstartup.j2 dest=/home/{{ item.name }}/.vnc/xstartup mode=0755
-  with_items:
-   vnc_users
-
-- name: Create a file vncserver in /etc/init.d/ directory
-  template: src=vncserver.j2 dest=/etc/init.d/vncserver owner=root group=root mode=0755
-  register: vnc_service
-
-- name: Add vncserver service to default runlevels
-  command: update-rc.d vncserver defaults
-  when: vnc_service.changed
+- template: src=x11vnc.conf.j2 dest=/etc/init/x11vnc.conf
 
 - name: Ufw open tcp ports
-  ufw: rule=allow port=5901 proto=tcp 
-
-- name: Restart VNC Service
-  command: /etc/init.d/vncserver restart
+  ufw: rule=allow port=5900 proto=tcp 
