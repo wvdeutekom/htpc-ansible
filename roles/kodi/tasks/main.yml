@@ -1,0 +1,51 @@
+---
+# tasks file for ansible-role-kodi
+
+
+- name: " Setup | apt | ensure added repository"
+  sudo: Yes
+  apt_repository: repo={{ kodi_pkg_apt_repo }}
+
+
+- name: " Setup | apt | ensure added base packages"
+  sudo: Yes
+  apt: name={{ item }} update_cache=yes cache_valid_time=86400
+  with_items:
+    - software-properties-common
+    - "kodi"
+
+
+- name: " Setup | apt | ensure added pvr package"
+  sudo: Yes
+  apt: name={{ kodi_pkg_pvr }} update_cache=yes cache_valid_time=86400
+  when: kodi_pkg_pvr is defined
+
+
+- name: "Config | all | ensure created conf folders"
+  file: >
+    path={{ item }} 
+    state=directory 
+    owner={{ ansible_ssh_user }} 
+    mode=0755
+  with_items:
+    - "{{ kodi_conf_dir }}"
+    - "{{ kodi_conf_dir }}/userdata"
+
+
+- name: "Config | all | ensure templated sources.xml"
+  template: >
+    src=sources.xml.j2 
+    dest="{{ kodi_conf_dir }}/userdata/sources.xml" 
+    owner={{ ansible_ssh_user }} 
+    mode=0755
+
+
+- name: "Config | all | ensure templated advancedsettings.xml"
+  template: >
+    src=advancedsettings.xml.j2 
+    dest="{{ kodi_conf_dir }}/userdata/advancedsettings.xml" 
+    owner={{ ansible_ssh_user }} 
+    mode=0755
+
+
+...

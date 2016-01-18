@@ -1,0 +1,23 @@
+---
+
+galaxy_info:
+  author: Prescott Chris
+  description: Installs and configures Kodi.
+  license: BSD
+  min_ansible_version: 1.8.4
+  platforms:
+  - name: Ubuntu
+    versions:
+    - trusty
+    - utopic
+    - vivid
+  - name: Debian
+    versions:
+    - wheezy
+    - jessie   
+  categories:
+  - system
+
+dependencies: []
+  
+...

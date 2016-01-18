@@ -11,3 +11,5 @@
     - { role: sabnzbd, tags: sabnzbd }
     - { role: sonarr, tags: sonarr }
     - { role: plexmediaserver, tags: plexmediaserver }
+    - { role: kodi, tags: kodi }
+    - { role: spotify, tags: spotify }
