@@ -11,7 +11,7 @@ mnt_series: /mnt/samba/Series
 sab_containername: sabnzbd
 sab_imagename: latest
 sab_hub_repository: sabnzbd
-sonarr_ports: "{{ sab_port_external }}{{ ':' }}{{ sab_port_internal }}"
+sab_ports: "{{ sab_port_external }}{{ ':' }}{{ sab_port_internal }}"
 sab_port_internal: 8080
 sab_port_external: 8080
 
@@ -37,7 +37,7 @@ plex_application_support_dir: "/var/lib/plexmediaserver/Library/Application Supp
 # Kodi
 
 # Package/System configuration
-kodi_conf_dir: ~/.kodi
+kodi_conf_dir: "/home/{{ ubuntu_user}}/.kodi"
 kodi_pkg_apt_repo: ppa:team-xbmc/ppa
 kodi_pkg_apt_ver: "2:14.2"
 

@@ -1,2 +1,2 @@
 [htpc]
-htpc-1 ansible_ssh_host=wijnand@w.vdeute.com ansible_ssh_user=wijnand TTY=ttyS0 firewall=ufw
+htpc-1 ansible_ssh_host=wijnand@94.210.144.107 ansible_ssh_user=wijnand TTY=ttyS0 firewall=ufw

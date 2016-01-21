@@ -13,4 +13,14 @@
   mount: name=/mnt/hdd3 src='UUID=24FC20B6FC208460' fstype=ntfs-3g opts=rw,user,nosuid,nodev state=present
 
 - name: mount /mnt/hdd4 disk
-  mount: name=/mnt/hdd4 src='UUID=361432ae-75d9-4435-bd9b-ba3df8b636c8' fstype=ext4 opts=noatime,data='writeback,nofail' state=present
+  mount: name=/mnt/hdd4 src='UUID=361432ae-75d9-4435-bd9b-ba3df8b636c8' fstype=ext4 opts=noatime,data=writeback,nofail state=present
+
+- name: copy GRUB config
+  copy: src=grub dest=/etc/default/grub owner=root group=root mode="0644"
+  tags: updategrub
+
+- name: run update-grub
+  shell: update-grub
+  register: command_result
+  changed_when: "command_result.stderr != 'Generating grub configuration file ...\nFound linux image: /boot/vmlinuz-3.19.0-47-generic\nFound initrd image: /boot/initrd.img-3.19.0-47-generic\nFound linux image: /boot/vmlinuz-3.19.0-43-generic\nFound initrd image: /boot/initrd.img-3.19.0-43-generic\nFound linux image: /boot/vmlinuz-3.19.0-25-generic\nFound initrd image: /boot/initrd.img-3.19.0-25-generic\nFound memtest86+ image: /memtest86+.elf\nFound memtest86+ image: /memtest86+.bin\ndone'"
+  tags: updategrub

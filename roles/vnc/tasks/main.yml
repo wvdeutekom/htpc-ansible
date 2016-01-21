@@ -4,9 +4,11 @@
   with_items:
     - x11vnc
 
-- shell: "sudo x11vnc -storepasswd {{ vnc_password }} /etc/x11vnc.pass"
+- name: Create vnc password
+  shell: "sudo x11vnc -storepasswd {{ vnc_password }} /etc/x11vnc.pass"
 
-- template: src=x11vnc.conf.j2 dest=/etc/init/x11vnc.conf
+- name: Copy vnc config
+  template: src=x11vnc.conf.j2 dest=/etc/init/x11vnc.conf
 
 - name: Ufw open tcp ports
   ufw: rule=allow port=5900 proto=tcp 
