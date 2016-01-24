@@ -2,74 +2,82 @@
 #
 ### BEGIN INIT INFO
 # Provides:          mount_shares_locally
-# Required-Start:    $network $local_fs $remote_fs smb mysqld
-# Required-Stop:     $network $local_fs $remote_fs smb
+# Required-Start:    $network $local_fs $remote_fs samba
+# Required-Stop:     $network $local_fs $remote_fs samba
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # Short-Description: mount Samba shares locally
 ### END INIT INFO
 
-username="wijnand"
+# version 2.0
+username="wijnand";
 
-if [ -f /etc/rc.d/init.d/functions ]; then
-    . /etc/rc.d/init.d/functions
+if [ -f /lib/lsb/init-functions ]; then
+       . /lib/lsb/init-functions
 fi
 
-start () {
-    uid=`id -u $username`
-    gid=`id -g $username`
+LOCKFILE=/var/lock/mount_shares_locally;
 
-    echo -n $"Mounting Samba shares locally: "
-    mkdir -p /mnt/samba/
-    cd /mnt/samba/
-    testparm -s /etc/samba/smb.conf 2>/dev/null | grep "^\[" | grep -v "\[global\]" | grep -v "\[homes\]" | awk -F'[' '{print $2}' | awk -F']' '{print $1}' | xargs -d "\n" mkdir -p
-    sleep 5
-    opt="credentials=/home/${username}/.smb_credentials,uid=${uid},gid=${gid},file_mode=0660,dir_mode=0770,nobrl,hard,_netdev,iocharset=utf8,noserverino,mfsymlinks"
-    supports_vers_opt=`/usr/bin/man mount.cifs | grep vers= | wc -l`
-    if [ "$supports_vers_opt" != "0" ]; then
-        opt="$opt,vers=3.0"
-    fi
-    ls -1 | while read d; do
-                if [ "`mount | grep "//127.0.0.1/$d/* on " | wc -l`" = "0" ]; then
-                        /sbin/mount.cifs "//127.0.0.1/$d" "$d" -o $opt
-                else
-                        echo "  Share [$d] is already mounted."
-                fi
-    done
-    touch /var/lock/subsys/mount_shares_locally
-    success $"$base startup"
-    echo
-    return 0
+lock_mount_shares_locally() {
+       if [ -x /usr/bin/lockfile-create ]; then
+               lockfile-create $LOCKFILE
+               lockfile-touch $LOCKFILE &
+       fi
+}
+
+unlock_mount_shares_locally() {        if [ -x /usr/bin/lockfile-create ] ; then
+               lockfile-remove $LOCKFILE
+       fi
+}
+
+start () {
+       uid=`id -u $username`
+       gid=`id -g $username`
+
+       log_daemon_msg "Mounting Samba shares locally..."
+       if [ ! -x /mnt/samba/ ]; then
+               mkdir -p /mnt/samba/
+       fi
+       cd /mnt/samba/
+       lock_mount_shares_locally
+       grep "^\[" /etc/samba/smb.conf | grep -v "\[global\]" | grep -v "\[homes\]" | awk -F'[' '{print $2}' | awk -F']' '{print $1}' | xargs -d "\n" mkdir -p
+       sleep 5
+       ls -1 | while read d; do
+               if [ "$d" = "printers" ] || [ "$d" = "print$" ]; then
+                       rmdir $d
+               else
+                       if [ "`mount | grep "//127.0.0.1/$d/* on " | wc -l`" = "0" ]; then
+                               echo "  Mounting share [$d]"
+                               /sbin/mount.cifs "//127.0.0.1/$d" "$d" -o credentials=/home/${username}/.smb_credentials,uid=${uid},gid=${gid},file_mode=0660,dir_mode=0770,nobrl,hard,_netdev,iocharset=utf8,noserverino,mfsymlinks
+                       else
+                               echo "  Share [$d] is already mounted."
+                       fi
+               fi
+       done
+       unlock_mount_shares_locally
+       log_end_msg
+       return 0
 }
 
 stop () {
-    echo -n $"Unmounting locally mounted Samba shares: "
-    /bin/umount -l /mnt/samba/*
-    rm -f /var/lock/subsys/mount_shares_locally
-    success $"$base shutdown"
-    echo
-    return 0
-}
-
-restart () {
-    stop
-    start
+       log_daemon_msg "Unmounting locally mounted Samba shares..."
+       /bin/umount -l /mnt/samba/*
+       log_end_msg
+       return 0
 }
 
 case "$1" in
-    start)
-        start
-        ;;
-    stop)
-        stop
-        ;;
-    restart)
-        restart
-        ;;
-    *)
-        echo $"Usage: $0 {start|stop|restart}"
-        exit 1
-        ;;
+       start)
+               start
+               ;;
+       stop)
+               stop
+               ;;
+       restart)
+               $0 stop && sleep 2 && $0 start
+               ;;
+       *)
+               echo "Usage: $0 {start|stop|restart}"
+               exit 2
+               ;;
 esac
-
-exit $?

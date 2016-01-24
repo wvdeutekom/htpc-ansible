@@ -13,6 +13,7 @@
     image: "{{ hub_username }}/{{ sonarr_hub_repository }}"
     state: reloaded
     pull: missing
+    restart_policy: always
     ports:
     - "{{ sonarr_ports }}"
     volumes:

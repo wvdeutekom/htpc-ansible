@@ -47,5 +47,9 @@
     owner={{ ansible_ssh_user }} 
     mode=0755
 
+- name: Ufw open tcp ports
+  ufw: rule=allow port={{ item }} proto=tcp 
+  with_items:
+    - 9090
 
 ...

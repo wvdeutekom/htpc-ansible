@@ -48,6 +48,7 @@
   template: src=samba_automount.j2 dest=/etc/init.d/mount_shares_locally mode="0755"
   become: yes
   become_method: sudo
+  tags: greyholemount
 
 - name: update-rc.d with automount
   shell: sudo update-rc.d mount_shares_locally defaults

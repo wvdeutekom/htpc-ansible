@@ -46,7 +46,7 @@ kodi_source_files: []
 kodi_source_music: []
 kodi_source_pictures: []
 kodi_source_programs: []
-kodi_source_videos: [ '/mnt/samba/Movies/']
+kodi_source_videos: [ '/mnt/samba/Movies/', '/mnt/samba/Series/' ]
 
 # Optional settings (Not defined by default)
 # kodi_advanced_settings:|

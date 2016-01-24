@@ -31,7 +31,7 @@
   when: result|failed
 
 - name: Copy default config to /etc/default/plexmediaserver
-  template: src=plex_defaults.j2 dest="/etc/default/plexmediaserver" owner=root group=root mode="0644"
+  template: src=plex_default.j2 dest="/etc/default/plexmediaserver" owner=root group=root mode="0644"
   become: yes
   become_method: sudo
   notify: restart plex
@@ -47,4 +47,20 @@
 - name: Ufw open plex port
   ufw: rule=allow port={{ sonarr_port_external }} proto=tcp 
 
+- name: Ufw open tcp ports
+  ufw: rule=allow port={{ item }} proto=tcp 
+  with_items:
+    - 32400
+    - 32469
+    - 61636
+
+- name: Ufw open udp ports
+  ufw: rule=allow port={{ item }} proto=udp 
+  with_items:
+    - 32413
+    - 1900
+    - 32412
+    - 32410
+    - 32414
+    - 65535
 

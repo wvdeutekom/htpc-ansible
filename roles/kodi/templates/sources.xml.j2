@@ -5,7 +5,7 @@
         <default pathversion="1"></default>
 {% for source in kodi_source_files %}
         <source>
-            <name>{{ source | basename  }}</name>
+            <name>{{ source.split('/')[-2] }}</name>
             <path pathversion="1">{{ source }}</path>
             <allowsharing>true</allowsharing>
         </source>
@@ -15,7 +15,7 @@
         <default pathversion="1"></default>
 {% for source in kodi_source_music %}
         <source>
-            <name>{{ source | basename  }}</name>
+            <name>{{ source.split('/')[-2] }}</name>
             <path pathversion="1">{{ source }}</path>
             <allowsharing>true</allowsharing>
         </source>
@@ -25,7 +25,7 @@
         <default pathversion="1"></default>
 {% for source in kodi_source_pictures %}
         <source>
-            <name>{{ source | basename  }}</name>
+            <name>{{ source.split('/')[-2] }}</name>
             <path pathversion="1">{{ source }}</path>
             <allowsharing>true</allowsharing>
         </source>
@@ -35,7 +35,7 @@
         <default pathversion="1"></default>
 {% for source in kodi_source_programs %}
         <source>
-            <name>{{ source | basename }}</name>
+            <name>{{ source.split('/')[-2] }}</name>
             <path pathversion="1">{{ source }}</path>
             <allowsharing>true</allowsharing>
         </source>
@@ -45,10 +45,12 @@
         <default pathversion="1"></default>
 {% for source in kodi_source_videos %}
         <source>
-            <name>{{ source | basename  }}</name>
+            <name>{{ source.split('/')[-2] }}</name>
             <path pathversion="1">{{ source }}</path>
             <allowsharing>true</allowsharing>
         </source>
 {% endfor %}
     </video>
 </sources>
+
+
