@@ -1,10 +1,10 @@
 ---
 
 - name: Create sabnzbd config dir
-  file: path=/home/wijnand/docker/dockerspace/sabnzbd/sabnzbd.ini state=directory owner=wijnand group=wijnand
+  file: path={{ sab_datadir }}/ state=directory owner=wijnand group=wijnand
 
 - name: Copy sabnzbd config file
-  template: src=sabnzbd.ini.j2 dest=/home/wijnand/docker/dockerspace/sabnzbd/sabnzbd.ini
+  template: src=sabnzbd.ini.j2 dest={{ sab_datadir }}/sabnzbd.ini
 
 - name: start sabnzbd container
   sudo: no

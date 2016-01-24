@@ -1,25 +1,29 @@
 ---
 
 - name: Create sonarr config dir
-  file: path=/home/wijnand/docker/dockerspace/sonarr/sonarr/ state=directory owner=nobody group=nogroup
+  file: path={{ sonarr_datadir }}/sonarr/ state=directory owner=nobody group=nogroup
 
 - name: Copy sonarr config
-  template: src=config.xml.j2 dest=/home/wijnand/docker/dockerspace/sonarr/sonarr/config.xml owner=nobody group=nogroup
+  template: src=config.xml.j2 dest={{ sonarr_datadir}}/sonarr/config.xml owner=nobody group=nogroup
 
 - name: start sonarr container
   sudo: no
   docker:
     name: sonarr
-    image: "{{ hub_username }}/{{ sonarr_hub_repository }}"
+    image: "linuxserver/sonarr"
     state: reloaded
     pull: missing
     restart_policy: always
     ports:
     - "{{ sonarr_ports }}"
+    env:
+      PUID: 1109
+      PGID: 999
     volumes:
-    - "{{ mnt_series }}{{ ':' }}/volumes/media"
-    - "{{ sonarr_datadir }}{{ ':' }}/volumes/config"
-    - "{{ sab_downloaddir }}{{ ':' }}/volumes/completed"
+    - "/dev/rtc:/dev/rtc:ro"
+    - "{{ mnt_series }}{{ ':' }}/tv"
+    - "{{ sonarr_datadir }}{{ ':' }}/config"
+    - "{{ sab_downloaddir }}{{ ':' }}/downloads"
     links:
     - "{{ sab_containername }}{{ ':' }}sabnzbd"
 
@@ -27,3 +31,20 @@
 - name: Ufw open sonarr port
   ufw: rule=allow port={{ sonarr_port_external }} proto=tcp 
 
+
+#- name: start sonarr container
+#  sudo: no
+#  docker:
+#    name: sonarr
+#    image: "{{ hub_username }}/{{ sonarr_hub_repository }}"
+#    state: reloaded
+#    pull: missing
+#    restart_policy: always
+#    ports:
+#    - "{{ sonarr_ports }}"
+#    volumes:
+#    - "{{ mnt_series }}{{ ':' }}/volumes/media"
+#    - "{{ sonarr_datadir }}{{ ':' }}/volumes/config"
+#    - "{{ sab_downloaddir }}{{ ':' }}/volumes/completed"
+#    links:
+#    - "{{ sab_containername }}{{ ':' }}sabnzbd"
