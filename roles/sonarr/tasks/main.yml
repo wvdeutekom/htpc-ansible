@@ -6,11 +6,15 @@
 - name: Copy sonarr config
   template: src=config.xml.j2 dest={{ sonarr_datadir}}/sonarr/config.xml owner=nobody group=nogroup
 
+- name: Copy sonarr database
+  copy: src=nzbdrone.db dest={{ sonarr_datadir}}/nzbdrone.db owner=wijnand group=admin
+
 - name: start sonarr container
   sudo: no
   docker:
     name: sonarr
     image: "linuxserver/sonarr"
+    privileged: True
     state: reloaded
     pull: missing
     restart_policy: always

@@ -15,5 +15,3 @@
   command: /usr/bin/newaliases
 - name: restart collectd
   service: name=collectd state=restarted enabled=yes
-- name: restart datadog
-  action: service name=datadog-agent state=restarted

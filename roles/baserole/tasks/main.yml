@@ -4,6 +4,7 @@
 - include: apt.yml
 - include: basepackages.yml
 - include: ssh.yml
+  tags: ssh_keys
 - include: host.yml
 - include: security.yml
 - include: timezone.yml

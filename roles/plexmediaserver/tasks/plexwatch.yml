@@ -1,0 +1,24 @@
+---
+- name: Install plexWatch dependencies
+  apt: name={{ item }} state=present update_cache=yes
+  with_items:
+    - libwww-perl 
+    - libxml-simple-perl 
+    - libtime-duration-perl 
+    - libtime-modules-perl 
+    - libdbd-sqlite3-perl 
+    - perl-doc 
+    - libjson-perl
+    - libfile-readbackwards-perl
+
+- name: Create /opt/plexWatch directory
+  file: path=/opt/plexWatch state=directory owner={{ ubuntu_user }} group={{ ubuntu_user }}
+
+- name: Copy plexWatch.pl to /opt/plexWatch/
+  copy: src=plexWatch.pl dest="/opt/plexWatch/plexWatch.pl" owner={{ ubuntu_user }} group={{ ubuntu_user }} mode="0755"
+
+- name: Copy plexWatch config to /opt/plexWatch/config.pl
+  template: src=plexwatch_config.conf.j2 dest="/opt/plexWatch/config.pl" owner={{ ubuntu_user }} group={{ ubuntu_user }} mode="0755"
+
+- name: Set plexWatch cronjob
+  cron: name="Run plexWatch" job="/opt/plexWatch/plexWatch.pl" state=present user={{ ubuntu_user }}

@@ -1,15 +1,17 @@
 ---
 - hosts: htpc
-  sudo: yes
+  become: yes
+  become_method: sudo
   vars_files: ["{{ vars_file }}"]
   roles:
     - { role: baserole, tags: baserole }
     - { role: ufw, tags: ufw }
+    - { role: datadog, tags: datadog }
     - { role: vnc, tags: vnc }
     - { role: greyhole, tags: greyhole }
     - { role: docker, docker-py: yes, tags: docker }
     - { role: sabnzbd, tags: sabnzbd }
     - { role: sonarr, tags: sonarr }
-    - { role: plexmediaserver, tags: plexmediaserver }
+    - { role: plexmediaserver, install_plex: false, install_plexwatch: true, tags: plexmediaserver }
     - { role: kodi, tags: kodi }
     - { role: spotify, tags: spotify }

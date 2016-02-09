@@ -3,12 +3,14 @@
 
 
 - name: " Setup | apt | ensure added repository"
-  sudo: Yes
+  become: yes
+  become_method: sudo
   apt_repository: repo={{ kodi_pkg_apt_repo }}
 
 
 - name: " Setup | apt | ensure added base packages"
-  sudo: Yes
+  become: yes
+  become_method: sudo
   apt: name={{ item }} update_cache=yes cache_valid_time=86400
   with_items:
     - software-properties-common
@@ -16,7 +18,8 @@
 
 
 - name: " Setup | apt | ensure added pvr package"
-  sudo: Yes
+  become: yes
+  become_method: sudo
   apt: name={{ kodi_pkg_pvr }} update_cache=yes cache_valid_time=86400
   when: kodi_pkg_pvr is defined
 

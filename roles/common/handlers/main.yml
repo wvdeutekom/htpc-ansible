@@ -18,3 +18,5 @@
 - name: reload monit configuration
   service: name=monit state=reloaded
 
+- name: restart datadog
+  action: service name=datadog-agent state=restarted

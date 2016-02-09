@@ -18,22 +18,27 @@
   when: result|failed
 
 # Install
-- name: Download plex .deb
-  get_url: url={{ plex_download }} dest={{ plex_deb_path }}
-  ignore_errors: yes
 - name: Check if plex is installed
-  command: "dpkg -s plexmediaserver"
-  register: result
+  shell: dpkg -s blaat | grep 'Version'
+  failed_when: "'I dont like red text in ansible' in result.stderr"
   changed_when: False
-  ignore_errors: yes
+  register: result
+  tags: plextest
+
+- name: Download plex .deb to {{ plex_deb_path }}
+  get_url: url={{ plex_download }} dest={{ plex_deb_path }}
+  when: "'is not installed and no information is available' in result.stderr"
+  tags: plextest
+
 - name: Installing plex
   command: "dpkg -i {{ plex_deb_path }}"
-  when: result|failed
+  when: "'is not installed and no information is available' in result.stderr"
 
 - name: Copy default config to /etc/default/plexmediaserver
   template: src=plex_default.j2 dest="/etc/default/plexmediaserver" owner=root group=root mode="0644"
   become: yes
   become_method: sudo
+  tags: testplex
   notify: restart plex
 
 - name: Copy plex config to /var/lib/plexmediaserver/Library/Application\ Support/Plex\ Media\ Server/
@@ -63,4 +68,8 @@
     - 32410
     - 32414
     - 65535
+
+- include: plexwatch.yml
+  when: install_plexwatch
+  tags: plexwatch
 

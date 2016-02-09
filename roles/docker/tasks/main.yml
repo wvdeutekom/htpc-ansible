@@ -26,3 +26,12 @@
   file: path=/home/wijnand/.docker state=directory
 
 - template: src=dockercfg.j2 dest=/home/wijnand/.docker/config.json mode=600 owner=wijnand group=wijnand 
+
+- name: Add datadog to docker group
+  user: name=dd-agent group=docker createhome=no state=present
+  tags: datadog
+
+- template: src=docker.datadog dest=/etc/dd-agent/conf.d/docker_daemon.yaml owner=dd-agent mode=0644
+  notify: restart datadog
+  tags: datadog
+

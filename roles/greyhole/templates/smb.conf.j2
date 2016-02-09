@@ -53,8 +53,8 @@
 [Movies]
 	comment = Movies    
 	path = /home/wijnand/LandingZones/Movies 
-	create mask = 0770
-	directory mask = 0770
+	create mask = 0777
+	directory mask = 0777
 	read only = no
 	available = yes
 	browseable = yes
@@ -67,8 +67,8 @@
 [Series]
     comment = Movies
     path = /home/wijnand/LandingZones/Series
-    create mask = 0770
-    directory mask = 0770
+    create mask = 0777
+    directory mask = 0777
     read only = no
     available = yes
     browseable = yes
@@ -95,8 +95,8 @@
 [Documents]
     comment = Movies
     path = /home/wijnand/LandingZones/Documents
-    create mask = 0770
-    directory mask = 0770
+    create mask = 0777
+    directory mask = 0777
     read only = no
     available = yes
     browseable = yes
@@ -247,7 +247,7 @@
 
 # Allow users who've been granted usershare privileges to create
 # public shares, not just authenticated ones
-   usershare allow guests = yes
+   usershare allow guests = no
 
 #======================= Share Definitions =======================
 
