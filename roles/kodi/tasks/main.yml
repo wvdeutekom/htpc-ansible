@@ -54,5 +54,12 @@
   ufw: rule=allow port={{ item }} proto=tcp 
   with_items:
     - 9090
+  tags: ufw
+
+- name: Ufw open udp ports
+  ufw: rule=allow port={{ item }} proto=udp 
+  with_items:
+    - 9777
+  tags: ufw
 
 ...
