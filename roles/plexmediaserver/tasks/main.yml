@@ -39,7 +39,7 @@
   template: src=plex_default.j2 dest="/etc/default/plexmediaserver" owner=root group=root mode="0644"
   become: yes
   become_method: sudo
-  tags: testplex
+  tags: configplex
   notify: restart plex
 
 - stat: path="/home/wijnand/Library/Application Support/Plex Media Server/Preferences.xml"
@@ -55,17 +55,17 @@
   service: name=plexmediaserver state=started
 
 - name: Ufw open plex port
-  ufw: rule=allow port={{ sonarr_port_external }} proto=tcp 
+  ufw: rule=allow port={{ sonarr_port_external }} proto=tcp
 
 - name: Ufw open tcp ports
-  ufw: rule=allow port={{ item }} proto=tcp 
+  ufw: rule=allow port={{ item }} proto=tcp
   with_items:
     - 32400
     - 32469
     - 61636
 
 - name: Ufw open udp ports
-  ufw: rule=allow port={{ item }} proto=udp 
+  ufw: rule=allow port={{ item }} proto=udp
   with_items:
     - 32413
     - 1900
@@ -77,4 +77,3 @@
 - include: plexwatch.yml
   when: install_plexwatch
   tags: plexwatch
-
