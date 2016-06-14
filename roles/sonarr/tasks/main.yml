@@ -10,7 +10,7 @@
   copy: src=nzbdrone.db dest={{ sonarr_datadir}}/nzbdrone.db owner=wijnand group=admin
 
 - name: start sonarr container
-  sudo: no
+  sudo: yes
   docker:
     name: sonarr
     image: "linuxserver/sonarr"
@@ -33,7 +33,7 @@
 
 
 - name: Ufw open sonarr port
-  ufw: rule=allow port={{ sonarr_port_external }} proto=tcp 
+  ufw: rule=allow port={{ sonarr_port_external }} proto=tcp
 
 
 #- name: start sonarr container

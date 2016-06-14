@@ -1,5 +1,6 @@
 ---
 - include: mounts.yml
+  when: mount_disks|default(false)
   tags: mounts
 - include: apt.yml
 - include: basepackages.yml

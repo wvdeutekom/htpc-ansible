@@ -38,25 +38,27 @@
     owner=root group=root mode=0644
 
 - copy: src=greyhole.monit dest=/etc/monit/conf.d/greyhole.conf
-  notify: reload monit configuration  
+  notify: reload monit configuration
 
 - name: Copy samba config to /etc/samba/smb.conf
   template: src=smb.conf.j2 dest=/etc/samba/smb.conf owner=root group=root mode="0644"
   notify: restart samba
 
-- name: Copy samba automount script 
+- name: Copy samba automount script
   template: src=samba_automount.j2 dest=/etc/init.d/mount_shares_locally mode="0755"
   become: yes
   become_method: sudo
   tags: greyholemount
 
 - name: update-rc.d with automount
-  shell: sudo update-rc.d mount_shares_locally defaults
+  become: yes
+  become_method: sudo
+  shell: update-rc.d mount_shares_locally defaults
 
 - shell: if [ -f /sbin/chkconfig ]; then sudo chkconfig --add mount_shares_locally; fi
 
 - name: Copy samba credentials to /home/wijnand/.smb_credentials
-  template: src=samba_credentials.j2 dest=/home/wijnand/.smb_credentials owner=wijnand group=wijnand 
+  template: src=samba_credentials.j2 dest=/home/wijnand/.smb_credentials owner=wijnand group=wijnand
 
 - shell: /etc/init.d/mount_shares_locally start
   become: yes

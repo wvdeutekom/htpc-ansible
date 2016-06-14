@@ -12,13 +12,14 @@ Vagrant.configure('2') do |config|
   config.ssh.forward_agent = true
   #config.ssh.insert_key = false
   config.vm.synced_folder ".", "/vagrant", disabled: true
-  config.apt_proxy.http  = "http://10.0.2.2:8080/"
-  config.apt_proxy.https = "http://10.0.2.2:8080/"
+  # config.apt_proxy.http  = "http://10.0.2.2:8080/"
+  # config.apt_proxy.https = "http://10.0.2.2:8080/"
 
   config.vm.provider "virtualbox" do |vb|
-    vb.customize ["modifyvm", :id, "--natdnsproxy1", "off"]
-    vb.customize ["modifyvm", :id, "--natdnshostresolver1", "off"]
+    # vb.customize ["modifyvm", :id, "--natdnsproxy1", "off"]
+    # vb.customize ["modifyvm", :id, "--natdnshostresolver1", "off"]
     vb.customize ["modifyvm", :id, "--memory", "2048"]
+    vb.gui = true
   end
 
   config.vm.define "vagrant-htpc", autostart: false do |machine|

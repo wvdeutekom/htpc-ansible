@@ -2,6 +2,8 @@
 vars_file: mock_variables.yml
 htpc_environment: development
 
+ubuntu_user: wijnand
+
 # General docker
 mnt_series: /mnt/samba/Series
 
@@ -32,3 +34,23 @@ plex_download: "https://plex.tv/downloads/latest/1?channel=16&build=linux-ubuntu
 plex_deb_path: /tmp/plexmediaserver.deb
 plex_application_support_dir: "/var/lib/plexmediaserver/Library/Application Support/Plex Media Server"
 
+# Kodi
+
+# Package/System configuration
+kodi_conf_dir: "/home/{{ ubuntu_user}}/.kodi"
+kodi_pkg_apt_repo: ppa:team-xbmc/ppa
+kodi_pkg_apt_ver: "2:14.2"
+
+# Arrays of filepaths. Reccomended to override.
+kodi_source_files: []
+kodi_source_music: []
+kodi_source_pictures: []
+kodi_source_programs: []
+kodi_source_videos: [ '/mnt/samba/Movies/', '/mnt/samba/Series/' ]
+
+# Optional settings (Not defined by default)
+# kodi_advanced_settings:|
+# kodi_mysql_server:
+# kodi_mysql_user:
+# kodi_mysql_pass:
+# kodi_pkg_pvr:

@@ -1,5 +1,5 @@
 ---
-vars_file: mock_variables.yml
+vars_file: prod_variables.yml
 htpc_environment: production
 
 ubuntu_user: wijnand
@@ -54,4 +54,3 @@ kodi_source_videos: [ '/mnt/samba/Movies/', '/mnt/samba/Series/' ]
 # kodi_mysql_user:
 # kodi_mysql_pass:
 # kodi_pkg_pvr:
-
