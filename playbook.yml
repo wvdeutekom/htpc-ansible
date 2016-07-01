@@ -6,6 +6,7 @@
   roles:
     - { role: baserole, tags: baserole }
     - { role: ufw, tags: ufw }
+    - { role: prometheus, prometheus_components: ["prometheus", "alertmanager"], prometheus_alertmanager_url: "http://localhost:9093/", tags: prometheus }
     - { role: datadog, tags: datadog }
     - { role: vnc, tags: vnc }
     - { role: greyhole, tags: greyhole }

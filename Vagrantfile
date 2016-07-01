@@ -19,7 +19,7 @@ Vagrant.configure('2') do |config|
     # vb.customize ["modifyvm", :id, "--natdnsproxy1", "off"]
     # vb.customize ["modifyvm", :id, "--natdnshostresolver1", "off"]
     vb.customize ["modifyvm", :id, "--memory", "2048"]
-    vb.gui = true
+    # vb.gui = true
   end
 
   config.vm.define "vagrant-htpc", autostart: false do |machine|
