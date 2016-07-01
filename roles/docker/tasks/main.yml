@@ -20,15 +20,18 @@
 - service: name=docker state=started
 
 - include: docker-py.yml
-  when: docker-py 
+  when: docker-py
 
 - name: Create /home/wijnand/.docker directory
   file: path=/home/wijnand/.docker state=directory
 
-- template: src=dockercfg.j2 dest=/home/wijnand/.docker/config.json mode=600 owner=wijnand group=wijnand 
+- template: src=dockercfg.j2 dest=/home/wijnand/.docker/config.json mode=600 owner=wijnand group=wijnand
 
-- name: Add datadog to docker group
-  user: name=dd-agent group=docker createhome=no state=present
+- name: Add {{ ubuntu_user }} and datadog to docker group
+  user: name={{ item }} group=docker createhome=no state=present
+  with_items:
+    - "{{ ubuntu_user }}"
+    - "dd-agent"
   tags: datadog
 
 - template: src=docker.datadog dest=/etc/dd-agent/conf.d/docker_daemon.yaml owner=dd-agent mode=0644

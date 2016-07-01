@@ -10,7 +10,8 @@
   copy: src=nzbdrone.db dest={{ sonarr_datadir}}/nzbdrone.db owner=wijnand group=admin
 
 - name: start sonarr container
-  sudo: yes
+  become: yes
+  become_user: "{{ ubuntu_user }}"
   docker:
     name: sonarr
     image: "linuxserver/sonarr"
