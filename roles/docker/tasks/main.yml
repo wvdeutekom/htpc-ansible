@@ -38,3 +38,20 @@
   notify: restart datadog
   tags: datadog
 
+- name: start cAdvisor container
+  become: yes
+  become_method: sudo
+  docker:
+    name: cAdvisor
+    privileged: yes
+    image: "google/cadvisor:latest"
+    state: reloaded
+    pull: missing
+    restart_policy: always
+    ports:
+    - "8030:8080"
+    volumes:
+      - "/:/rootfs:ro"
+      - "/var/run:/var/run:rw"
+      - "/sys:/sys:ro"
+      - "/var/lib/docker/:/var/lib/docker:ro"

@@ -59,3 +59,35 @@
 - name: install alertmanager
   include: install-alertmanager.yml
   when: '"alertmanager" in prometheus_components'
+
+- name: start node exporter container
+  become: yes
+  become_user: "{{ ubuntu_user }}"
+  docker:
+    name: node_exporter
+    image: "prom/node-exporter"
+    privileged: yes
+    net: host
+    state: reloaded
+    pull: missing
+    restart_policy: always
+
+- name: start Grafana container
+  become: yes
+  become_user: "{{ ubuntu_user }}"
+  docker:
+    name: Grafana
+    privileged: no
+    image: "grafana/grafana"
+    state: reloaded
+    pull: missing
+    restart_policy: always
+    ports:
+    - "3000:3000"
+    volumes:
+      - "/home/{{ ubuntu_user }}/grafana_db{{ ':' }}/var/lib/grafana"
+    env:
+      GF_SECURITY_ADMIN_USER: grafana
+      GF_SECURITY_ADMIN_PASSWORD: password
+      GF_AUTH_GITHUB_ENABLED: true
+      GF_AUTH_GITHUB_ALLOW_SIGN_UP: true
