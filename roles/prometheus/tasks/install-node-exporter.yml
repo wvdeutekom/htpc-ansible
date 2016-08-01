@@ -10,13 +10,13 @@
 
     - name: set internal variables for convenience
       set_fact:
-        prometheus_node_exporter_tarball_url: "https://github.com/prometheus/node_exporter/releases/download/{{ prometheus_node_exporter_version }}/node_exporter-{{ prometheus_node_exporter_version }}.linux-amd64.tar.gz"
+        prometheus_node_exporter_tarball_url: "https://github.com/prometheus/node_exporter/releases/download/v{{ prometheus_node_exporter_version }}/node_exporter-{{ prometheus_node_exporter_version }}.linux-amd64.tar.gz"
         prometheus_node_exporter_subdir: "{{ prometheus_install_path }}/node_exporter-{{ prometheus_node_exporter_version }}.linux-amd64"
       when: ansible_userspace_bits == "64"
 
     - name: set internal variables for convenience
       set_fact:
-        prometheus_node_exporter_tarball_url: "https://github.com/prometheus/node_exporter/releases/download/{{ prometheus_node_exporter_version }}/node_exporter-{{ prometheus_node_exporter_version }}.linux-386.tar.gz"
+        prometheus_node_exporter_tarball_url: "https://github.com/prometheus/node_exporter/releases/download/v{{ prometheus_node_exporter_version }}/node_exporter-{{ prometheus_node_exporter_version }}.linux-386.tar.gz"
         prometheus_node_exporter_subdir: "{{ prometheus_install_path }}/node_exporter-{{ prometheus_node_exporter_version }}.linux-386"
       when: ansible_userspace_bits == "32"
 

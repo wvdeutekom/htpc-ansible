@@ -20,7 +20,7 @@
 
     - name: set internal variables for convenience, part 2
       set_fact:
-        prometheus_alertmanager_tarball_url: "https://github.com/prometheus/alertmanager/releases/download/{{ prometheus_alertmanager_version }}/{{ prometheus_alertmanager_signature }}.tar.gz"
+        prometheus_alertmanager_tarball_url: "https://github.com/prometheus/alertmanager/releases/download/v{{ prometheus_alertmanager_version }}/{{ prometheus_alertmanager_signature }}.tar.gz"
         prometheus_alertmanager_untar_path: "{{ prometheus_install_path }}"
         prometheus_alertmanager_daemon_dir: "{{ prometheus_install_path }}/{{ prometheus_alertmanager_signature }}"
 

@@ -6,59 +6,87 @@
 # @see http://prometheus.io/docs/introduction/getting_started/
 #
 
-- name: set role variables, if necessary
-  include: set-role-variables.yml
+# - name: set role variables, if necessary
+#   include: set-role-variables.yml
 
-- name: install libselinux-python binary for Ansible to work
-  yum: name=libselinux-python state=present
-  when: ansible_pkg_mgr == "yum"
+# - name: install libselinux-python binary for Ansible to work
+#   yum: name=libselinux-python state=present
+#   when: ansible_pkg_mgr == "yum"
 
-- name: install dependencies for compiling Prometheus source code
-  include: install-compile-tools.yml
-  when: prometheus_alertmanager_version == "git" or prometheus_node_exporter_version == "git" or prometheus_version == "git"
+# - name: install dependencies for compiling Prometheus source code
+#   include: install-compile-tools.yml
+#   when: prometheus_alertmanager_version == "git" or prometheus_node_exporter_version == "git" or prometheus_version == "git"
 
 
 
-- name: create Prometheus group
-  group: name={{ prometheus_group }}  state=present
+# - name: create Prometheus group
+#   group: name={{ prometheus_group }}  state=present
 
-- name: create Prometheus user
-  user:
-    name: "{{ prometheus_user }}"
-    group: "{{ prometheus_group }}"
-    createhome: no
-    shell: /sbin/nologin
-    comment: "Prometheus User"
-    state: present
+# - name: create Prometheus user
+#   user:
+#     name: "{{ prometheus_user }}"
+#     group: "{{ prometheus_group }}"
+#     createhome: no
+#     shell: /sbin/nologin
+#     comment: "Prometheus User"
+#     state: present
 
-- name: mkdir for general cases
-  file:
-    path: "{{ item }}"
-    state: directory
-    owner: "{{ prometheus_user }}"
-    group: "{{ prometheus_group }}"
-    mode: "u=rwx,g=rx,o="
+# - name: mkdir for general cases
+#   file:
+#     path: "{{ item }}"
+#     state: directory
+#     owner: "{{ prometheus_user }}"
+#     group: "{{ prometheus_group }}"
+#     mode: "u=rwx,g=rx,o="
+#   with_items:
+#     - "{{ prometheus_install_path }}"
+#     - "{{ prometheus_config_path }}"
+#     - "{{ prometheus_log_path }}"
+#     - "{{ prometheus_pid_path }}"
+
+
+# - name: install helper utility "gosu"
+#   include: install-gosu.yml
+
+# - name: install prometheus
+#   include: install-prometheus.yml
+#   when: '"prometheus" in prometheus_components'
+
+# - name: install node-exporter
+#   include: install-node-exporter.yml
+#   when: '"node_exporter" in prometheus_components'
+
+# - name: install alertmanager
+#   include: install-alertmanager.yml
+#   when: '"alertmanager" in prometheus_components'
+
+- name: create ext storage volume path
+  file: state=directory path={{ item }} mode=0750
   with_items:
-    - "{{ prometheus_install_path }}"
-    - "{{ prometheus_config_path }}"
-    - "{{ prometheus_log_path }}"
-    - "{{ prometheus_pid_path }}"
+    - "{{ ext_prometheus_storage_volume }}"
+    - "{{ ext_prometheus_conf_volume }}"
 
+- name: copy prometheus main config file
+  template:
+    src: "prometheus.yml.j2"
+    dest: "{{ ext_prometheus_conf_volume }}/prometheus.yml"
 
-- name: install helper utility "gosu"
-  include: install-gosu.yml
-
-- name: install prometheus
-  include: install-prometheus.yml
-  when: '"prometheus" in prometheus_components'
-
-- name: install node-exporter
-  include: install-node-exporter.yml
-  when: '"node_exporter" in prometheus_components'
-
-- name: install alertmanager
-  include: install-alertmanager.yml
-  when: '"alertmanager" in prometheus_components'
+- name: start prometheus container
+  docker:
+    image: prom/prometheus
+    state: started
+    read_only: yes
+    hostname: "prom-{{ ansible_hostname }}"
+    dns:
+      - 8.8.8.8
+    ports:
+      - "{{ prometheus_port }}:9090"
+    volumes:
+      - "{{ ext_prometheus_conf_volume }}/prometheus.yml:/etc/prometheus/prometheus.yml"
+      - "{{ ext_prometheus_storage_volume }}:/prometheus"
+    name: prometheus
+    restart_policy: always
+    restart_policy_retry: 10000000
 
 - name: start node exporter container
   become: yes
@@ -87,7 +115,7 @@
     volumes:
       - "/home/{{ ubuntu_user }}/grafana_db{{ ':' }}/var/lib/grafana"
     env:
-      GF_SECURITY_ADMIN_USER: grafana
-      GF_SECURITY_ADMIN_PASSWORD: password
+      GF_SECURITY_ADMIN_USER: "{{ prometheus_grafana_username|default(grafana) }}"
+      GF_SECURITY_ADMIN_PASSWORD: "{{ prometheus_grafana_password|default(grafana) }}"
       GF_AUTH_GITHUB_ENABLED: true
       GF_AUTH_GITHUB_ALLOW_SIGN_UP: true

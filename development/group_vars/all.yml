@@ -54,3 +54,8 @@ kodi_source_videos: [ '/mnt/samba/Movies/', '/mnt/samba/Series/' ]
 # kodi_mysql_user:
 # kodi_mysql_pass:
 # kodi_pkg_pvr:
+
+# Prometheus
+prometheus_version:                 1.0.0
+prometheus_node_exporter_version:   0.12.0
+prometheus_alertmanager_version:    0.3.0
