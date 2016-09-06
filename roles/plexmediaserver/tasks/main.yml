@@ -32,7 +32,7 @@
   tags: plextest
 
 - name: Installing plex
-  command: "dpkg -i {{ plex_deb_path }}"
+  command: "dpkg --force-confnew -i {{ plex_deb_path }}"
   when: "'is not installed and no information is available' in result.stderr"
 
 - name: Copy default config to /etc/default/plexmediaserver
