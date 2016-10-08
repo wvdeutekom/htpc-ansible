@@ -72,9 +72,11 @@
     dest: "{{ ext_prometheus_conf_volume }}/prometheus.yml"
 
 - name: start prometheus container
+  become: yes
+  become_user: "{{ ubuntu_user }}"
   docker:
     image: prom/prometheus
-    state: started
+    state: reloaded
     read_only: yes
     hostname: "prom-{{ ansible_hostname }}"
     dns:
@@ -86,7 +88,7 @@
       - "{{ ext_prometheus_storage_volume }}:/prometheus"
     name: prometheus
     restart_policy: always
-    restart_policy_retry: 10000000
+    restart_policy_retry: 10
 
 - name: start node exporter container
   become: yes
