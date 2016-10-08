@@ -1,0 +1,40 @@
+---
+encrypted_ssh_password: 123456789
+wijnand_personal_network: 127.0.0.1
+vdeute_subdomain: "infra.vdeute.com"
+system_mailfrom_address: test@vdeute.com
+system_mailto_address: test@vdeute.com
+
+# Docker
+hub_username: wvdeutekom
+docker_auth_token: 123456789
+docker_auth_email: test@vdeute.com
+
+
+# Sabnzbd
+sab_api_key: 123456789
+sab_sunny_username: test@vdeute.com
+sab_sunny_password: 123456789
+
+# Plex
+plex_username: test
+plex_mail: test@vdeute.com
+plex_token: 123456789
+
+# PlexWatch
+plexwatch_pushover_token: 123456789
+plexwatch_pushover_user: 123456789
+
+# Sonarr
+sonarr_api_token: 123456789
+
+# VNC
+vnc_password: 123456789
+
+# Datadog
+datadog_api_key: 123456789
+
+
+    # >>> crypt.crypt('thepasswordyouwanttoencrypt', '$6$Som3S@lt$')
+    # 'output'
+    # >>
