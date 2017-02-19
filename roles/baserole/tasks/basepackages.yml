@@ -23,11 +23,12 @@
     - monit
     - moreutils
     - ntp
-    - postfix
+    - python-apt
     - python-pycurl
     - python-software-properties
+    - supervisor
     - tshark
-    - unattended-upgrades 
+    - unattended-upgrades
     - unzip
   tags:
     - install

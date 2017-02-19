@@ -59,3 +59,19 @@ kodi_source_videos: [ '/mnt/samba/Movies/', '/mnt/samba/Series/' ]
 prometheus_version:                 1.0.0
 prometheus_node_exporter_version:   0.12.0
 prometheus_alertmanager_version:    0.3.0
+
+# Syncthing
+syncthing_version: 0.14.23
+syncthing_url: https://github.com/syncthing/syncthing/releases/download/v{{syncthing_version}}/syncthing-{{ansible_system|lower}}-{{serf_architecture[ansible_architecture]}}-v{{syncthing_version}}.tar.gz
+syncthing_user: syncthing
+syncthing_address: 0.0.0.0:8090
+syncthing_listen: 0.0.0.0:22000
+syncthing_home: /home/syncthing
+syncthing_localannounce: true
+syncthing_globalannounce: true
+syncthing_upnp: true
+
+
+syncthing_use_ufw: true
+syncthing_use_systemd: true
+syncthing_use_supervisor: false
