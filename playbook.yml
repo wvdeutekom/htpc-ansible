@@ -16,7 +16,6 @@
     - { role: sonarr, tags: sonarr }
     - { role: plexmediaserver, install_plex: false, install_plexwatch: true, tags: plexmediaserver }
     - { role: kodi, tags: kodi }
-    - { role: spotify, tags: spotify }
 
 - hosts: toaster
   become: yes

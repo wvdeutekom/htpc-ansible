@@ -14,6 +14,7 @@
   shell: "{{syncthing_home}}/bin/syncthing --version | awk '{ print $2 }' | cut -c 2-"
   changed_when: false
   ignore_errors: true
+  check_mode: no
   register: version
 
 - name: download
@@ -70,7 +71,7 @@
 - name: config.xml | listen address
   lineinfile: dest={{syncthing_home}}/.config/syncthing/config.xml
               regexp="<listenAddress>[^<]+</listenAddress>"
-              line="        <listenAddress>{{syncthing_listen}}</listenAddress>"
+              line="        <listenAddress>tcp://{{syncthing_listen}}</listenAddress>"
   notify: restart syncthing
 
 - name: config.xml | localAnnounceEnabled
