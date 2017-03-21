@@ -1,0 +1,11 @@
+---
+- apt_repository:
+    repo: deb http://nl.archive.ubuntu.com/ubuntu trusty main universe
+    state: present
+
+- name: Install encfs
+  apt: pkg=encfs=1.7.4-2.4ubuntu2 state=present update_cache=yes
+
+- apt_repository:
+    repo: deb http://nl.archive.ubuntu.com/ubuntu trusty main universe
+    state: absent
