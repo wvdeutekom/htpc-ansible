@@ -1,61 +1,59 @@
 ---
-# Dependencies
-- name: Ensure plex dependencies are installed
-  action: apt pkg={{ item }} state=present
-  register: result
-  with_items:
-    - libavahi-common3
-    - libavahi-core7
-    - libdaemon0
-    - libnss-mdns
-    - libavahi-client3
-    - libavahi-common3
-    - avahi-daemon
-    - avahi-utils
-  ignore_errors: yes
-- name: Running apt-get -f install to fix any potential problems the last command had
-  command: apt-get -f install
-  when: result|failed
+- name: Create plex group
+  group:
+    name: "{{ plex.group }}"
+    system: yes
 
-# Install
-- name: Check if plex is installed
-  shell: dpkg -s blaat | grep 'Version'
-  failed_when: "'I dont like red text in ansible' in result.stderr"
-  changed_when: False
-  register: result
-  always_run: yes
-  tags: plextest
+- name: Create plex user
+  user:
+    name: "{{ plex.user }}"
+    home: "/home/plex"
+    group: "{{ plex.group }}"
+    system: yes
 
-- name: Download plex .deb to {{ plex_deb_path }}
-  get_url: url={{ plex_download }} dest={{ plex_deb_path }}
-  when: "'is not installed and no information is available' in result.stderr"
-  tags: plextest
+- name: Add plexmediaserver ppa
+  apt_repository:
+    repo: "deb https://downloads.plex.tv/repo/deb/ public main"
+    state: present
+    filename: plexmediaserver
 
-- name: Installing plex
-  command: "dpkg --force-confnew -i {{ plex_deb_path }}"
-  when: "'is not installed and no information is available' in result.stderr"
+
+- name: Add plexmediaserver ppa key
+  apt_key:
+    url: "https://downloads.plex.tv/plex-keys/PlexSign.key"
+    state: present
+
+- name: Install plexmediaserver
+  apt:
+    name: plexmediaserver
+    update_cache: yes
+    state: present
 
 - name: Copy default config to /etc/default/plexmediaserver
-  template: src=plex_default.j2 dest="/etc/default/plexmediaserver" owner=root group=root mode="0644"
+  template:
+    src: plex_default.j2
+    dest: "/etc/default/plexmediaserver"
+    owner: root
+    group: root
+    mode: 0644
   become: yes
   become_method: sudo
   tags: configplex
   notify: restart plex
 
-- stat: path="/home/wijnand/Library/Application Support/Plex Media Server/Preferences.xml"
-  register: preferences_file
+- name: Create plex systemctl service
+  template:
+    src: plex_service.j2
+    dest: /etc/systemd/system/plexmediaserver.service
+    owner: root
+    group: root
+    mode: 664
 
-- name: Copy plex config to /var/lib/plexmediaserver/Library/Application\ Support/Plex\ Media\ Server/
-  template: src=plexconfig.j2 dest="/home/wijnand/Library/Application Support/Plex Media Server/Preferences_test.xml" owner=plex group=plex mode="0644"
-  notify: restart plex
-  when: not preferences_file.stat.exists
-
-# Start it
-- name: Ensure plex is running
-  service: name=plexmediaserver state=started
-
-- name: Ufw open plex port
-  ufw: rule=allow port={{ sonarr_port_external }} proto=tcp
+- name: Enable plexmediaserver service at startup
+  systemd:
+    name: plexmediaserver
+    enabled: yes
+    daemon_reload: yes
 
 - name: Ufw open tcp ports
   ufw: rule=allow port={{ item }} proto=tcp
@@ -74,6 +72,6 @@
     - 32414
     - 65535
 
-- include: plexwatch.yml
-  when: install_plexwatch
-  tags: plexwatch
+# - include: plexwatch.yml
+#   when: install_plexwatch
+#   tags: plexwatch

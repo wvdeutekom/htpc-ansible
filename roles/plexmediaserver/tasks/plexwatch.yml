@@ -23,25 +23,25 @@
 - name: Set plexWatch cronjob
   cron: name="Run plexWatch" job="/opt/plexWatch/plexWatch.pl" state=present user={{ ubuntu_user }}
 
-- name: start plexwatch container
-  become: yes
-  become_user: "{{ ubuntu_user }}"
-  docker:
-    name: plexwatch
-    image: "linuxserver/sonarr"
-    privileged: True
-    state: reloaded
-    pull: missing
-    restart_policy: always
-    ports:
-    - "{{ sonarr_ports }}"
-    env:
-      PUID: 1109
-      PGID: 999
-    volumes:
-    - "/dev/rtc:/dev/rtc:ro"
-    - "{{ mnt_series }}{{ ':' }}/tv"
-    - "{{ sonarr_datadir }}{{ ':' }}/config"
-    - "{{ sab_downloaddir }}{{ ':' }}/downloads"
-    links:
-    - "{{ sab_containername }}{{ ':' }}sabnzbd"
+# - name: start plexwatch container
+#   become: yes
+#   become_user: "{{ ubuntu_user }}"
+#   docker:
+#     name: plexwatch
+#     image: "linuxserver/sonarr"
+#     privileged: True
+#     state: reloaded
+#     pull: missing
+#     restart_policy: always
+#     ports:
+#     - "{{ sonarr_ports }}"
+#     env:
+#       PUID: 1109
+#       PGID: 999
+#     volumes:
+#     - "/dev/rtc:/dev/rtc:ro"
+#     - "{{ mnt_series }}{{ ':' }}/tv"
+#     - "{{ sonarr_datadir }}{{ ':' }}/config"
+#     - "{{ sab_downloaddir }}{{ ':' }}/downloads"
+#     links:
+#     - "{{ sab_containername }}{{ ':' }}sabnzbd"

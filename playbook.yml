@@ -14,7 +14,7 @@
     - { role: prometheus, prometheus_components: ["prometheus", "alertmanager"], prometheus_alertmanager_url: "http://localhost:9093/", tags: prometheus }
     - { role: sabnzbd, tags: sabnzbd }
     - { role: sonarr, tags: sonarr }
-    - { role: plexmediaserver, install_plex: false, install_plexwatch: true, tags: plexmediaserver }
+    - { role: plexmediaserver, install_plex: true, install_plexwatch: true, tags: plexmediaserver }
     - { role: kodi, tags: kodi }
 
 - hosts: toaster

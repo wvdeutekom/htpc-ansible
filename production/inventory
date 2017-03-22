@@ -1,5 +1,6 @@
 [htpc]
 htpc-1 ansible_ssh_host=w.vdeute.com ansible_ssh_user=wijnand TTY=ttyS0 firewall=ufw mount_disks=true
+vm ansible_ssh_host=192.168.0.13 ansible_ssh_user=wijnand TTY=ttyS0 firewall=ufw
 
 [toaster]
 toaster ansible_ssh_host=136.144.132.92 ansible_ssh_user=wijnand TTY=ttyS0 firewall=ufw
