@@ -1,0 +1,22 @@
+#!/bin/sh
+
+set -x
+
+#Unmount any directories already mounted
+/bin/fusermount -uz /home/{{ plex.user }}/acd
+/bin/fusermount -uz /home/{{ plex.user }}/.acd
+/bin/fusermount -uz /home/{{ plex.user }}/local
+/bin/fusermount -uz /home/{{ plex.user }}/.local
+/bin/fusermount -uz /home/{{ plex.user }}/media
+
+#Mount ACD using rClone
+/usr/sbin/rclone mount acd:Plex /home/{{ plex.user }}/.acd &
+
+#Mount encryption over these folders
+ENCFS6_CONFIG='/home/{{ plex.user }}/encfs_acd.xml' encfs --extpass="cat /home/{{ plex.user }}/encfs_acd_pass" /home/{{ plex.user }}/.acd /home/plex/acd
+ENCFS6_CONFIG='/home/{{ plex.user }}/encfs_acd.xml' encfs --extpass="cat /home/{{ plex.user }}/encfs_acd_pass" /home/{{ plex.user }}/.local /home/plex/local
+
+#Use union-fs to merge our remote and local directories
+# unionfs-fuse -o cow /home/plex/local=RW:/home/plex/acd=RO /home/plex/media
+
+exit

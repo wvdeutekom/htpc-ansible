@@ -6,6 +6,7 @@
   roles:
     - { role: baserole, tags: baserole }
     - { role: ufw, tags: ufw }
+    - { role: encfs, tags: encfs }
     - { role: syncthing, syncthing_use_systemd: false, syncthing_use_supervisor: true, tags: syncthing }
     - { role: datadog, tags: datadog }
     - { role: vnc, tags: vnc }
@@ -14,7 +15,8 @@
     - { role: prometheus, prometheus_components: ["prometheus", "alertmanager"], prometheus_alertmanager_url: "http://localhost:9093/", tags: prometheus }
     - { role: sabnzbd, tags: sabnzbd }
     - { role: sonarr, tags: sonarr }
-    - { role: plexmediaserver, install_plex: true, install_plexwatch: true, tags: plexmediaserver }
+    - { role: rclone, tags: rclone }
+    - { role: plexmediaserver, install_plex: true, install_plexwatch: true, use_acd: yes, tags: plexmediaserver }
     - { role: kodi, tags: kodi }
 
 - hosts: toaster
@@ -23,4 +25,5 @@
   vars_files: ["{{ vars_file }}"]
   roles:
     - { role: baserole, tags: baserole }
+    - { role: rclone, tags: rclone }
     - { role: syncthing, tags: syncthing }

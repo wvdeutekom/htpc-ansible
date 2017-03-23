@@ -72,6 +72,10 @@
     - 32414
     - 65535
 
+- include: acd.yml
+  when: use_acd
+  tags: plex_acd
+
 # - include: plexwatch.yml
 #   when: install_plexwatch
 #   tags: plexwatch

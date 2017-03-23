@@ -11,5 +11,3 @@
 - include: timezone.yml
 - include: postfix.yml
 - include: logrotate.yml
-- include: encfs.yml
-  tags: encfs

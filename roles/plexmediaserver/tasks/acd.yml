@@ -1,0 +1,53 @@
+---
+# mkdir .acd # encrypted dir for mounted amazond cloud drive
+# mkdir acd # decrypted dir for ACD
+# mkdir .local # encrypted dir for uploading to ACD
+# mkdir local # decrypted dir for uploading to ACD
+# mkdir media # Fusion dir that shows both local and mounted acd files. Point Plex to this dir
+
+- name: unmount encfs directories
+  shell: |
+    /bin/fusermount -uz /home/{{ plex.user }}/acd
+    /bin/fusermount -uz /home/{{ plex.user }}/.acd
+    /bin/fusermount -uz /home/{{ plex.user }}/local
+    /bin/fusermount -uz /home/{{ plex.user }}/.local
+    /bin/fusermount -uz /home/{{ plex.user }}/media
+  failed_when: false
+
+- name: Create enfs directories
+  file:
+    path: "/home/{{ plex.user }}/{{ item }}"
+    owner: "{{ plex.user }}"
+    group: "{{ plex.group }}"
+    state: directory
+  with_items:
+    - .acd
+    - acd
+    - .local
+    - local
+    - media
+
+- name: Copy encfs mount script
+  template:
+    src: encfs_mount_acd.sh.j2
+    dest: "/home/{{ plex.user }}/encfs_mount_acd.sh"
+    owner: "{{ plex.user }}"
+    group: "{{ plex.group }}"
+    mode: 0700
+
+- name: Place encfs.xml file
+  template:
+    src: encfs_acd.xml.j2
+    dest: "/home/{{ plex.user }}/encfs_acd.xml"
+    owner: "{{ plex.user }}"
+    group: "{{ plex.group }}"
+    mode: 0400
+
+- name: Place encfs password file
+  template:
+    src: encfs_acd_pass.j2
+    dest: "/home/{{ plex.user }}/encfs_acd_pass"
+    owner: "{{ plex.user }}"
+    group: "{{ plex.group }}"
+    mode: 0400
+  no_log: true
