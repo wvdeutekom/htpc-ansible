@@ -1,0 +1,12 @@
+---
+logrotate_scripts:
+    - name: rclone_cron
+      path: /var/log/rclone/*.log
+      options:
+        - daily
+        - size 25M
+        - rotate 5
+        - missingok
+        - compress
+        - delaycompress
+        - copytruncate

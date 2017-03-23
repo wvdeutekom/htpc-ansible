@@ -17,6 +17,6 @@ ENCFS6_CONFIG='/home/{{ plex.user }}/encfs_acd.xml' encfs --extpass="cat /home/{
 ENCFS6_CONFIG='/home/{{ plex.user }}/encfs_acd.xml' encfs --extpass="cat /home/{{ plex.user }}/encfs_acd_pass" /home/{{ plex.user }}/.local /home/plex/local
 
 #Use union-fs to merge our remote and local directories
-# unionfs-fuse -o cow /home/plex/local=RW:/home/plex/acd=RO /home/plex/media
+unionfs-fuse -o cow /home/plex/local=RW:/home/plex/acd=RO /home/plex/media
 
 exit

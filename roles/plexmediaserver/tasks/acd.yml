@@ -26,14 +26,32 @@
     - .local
     - local
     - media
+    - script
 
 - name: Copy encfs mount script
   template:
     src: encfs_mount_acd.sh.j2
-    dest: "/home/{{ plex.user }}/encfs_mount_acd.sh"
+    dest: "/home/{{ plex.user }}/script/encfs_mount_acd.sh"
     owner: "{{ plex.user }}"
     group: "{{ plex.group }}"
     mode: 0700
+  tags: blaat
+
+- name: Copy 'rclone copy to acd' script
+  template:
+    src: rclone_copy_acd.sh.j2
+    dest: "/home/{{ plex.user }}/script/rclone_copy_acd.sh"
+    owner: "{{ plex.user }}"
+    group: "{{ plex.group }}"
+    mode: 0700
+  tags: blaat
+
+- name: Create cron to ron rclone copy to acd
+  cron:
+    name: "rclone copy (upload) to acd"
+    minute: "0"
+    hour: "0"
+    job: "flock -n /home/{{ plex.user }}/script/rclone.lock -c /bin/sh /home/{{ plex.user }}/script/rclone_copy_acd.sh"
 
 - name: Place encfs.xml file
   template:
@@ -51,3 +69,8 @@
     group: "{{ plex.group }}"
     mode: 0400
   no_log: true
+
+- name: Install Union-FS
+  apt:
+    name: unionfs-fuse
+    state: present

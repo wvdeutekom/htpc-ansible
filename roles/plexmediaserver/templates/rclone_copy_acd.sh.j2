@@ -1,0 +1,10 @@
+#!/bin/sh
+
+set -ex
+
+rclone \
+--transfers=16 \
+--checkers=8 \
+--drive-chunk-size=1024 \
+--log-file /var/logs/rclone/rclone.$(date +%Y%m%d_%H%M%S).log \
+copy /tmp/testupload acd:/testfile/
