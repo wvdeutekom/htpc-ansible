@@ -11,6 +11,9 @@
 #       owner=root group=root mode=0644
 #   when: htpc_environment == 'development'
 
+- name: install python 2
+  raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+
 - name: Place unattended upgrades config (sifter 3580)
   template: >
       src=unattended-upgrades.j2 dest=/etc/apt/apt.conf.d/50unattended-upgrades
