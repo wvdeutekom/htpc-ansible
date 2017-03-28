@@ -66,9 +66,9 @@
 
 - name: Create cron to ron rclone copy to acd
   cron:
-    name: "rclone copy (upload) to acd"
+    name: "rclone move (upload) to acd"
     user: "{{ plex.user }}"
-    minute: "*"
+    minute: "0"
     hour: "*"
     job: "flock -n /tmp/rclone.lock -c /home/{{ plex.user }}/script/rclone_copy_acd.sh"
 

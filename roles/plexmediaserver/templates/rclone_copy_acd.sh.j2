@@ -11,4 +11,4 @@ set -ex
 --log-file /var/log/rclone/rclone_copy.$(date +%Y%m%d_%H%M%S).log \
 --verbose \
 --stats 5s \
-copy /home/{{ plex.user }}/.local_acd/ acd_de:/Plex
+move /home/{{ plex.user }}/.local_acd/ acd_de:/Plex
