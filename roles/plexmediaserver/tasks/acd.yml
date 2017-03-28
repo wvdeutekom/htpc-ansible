@@ -1,16 +1,16 @@
 ---
 # mkdir .acd # encrypted dir for mounted amazond cloud drive
 # mkdir acd # decrypted dir for ACD
-# mkdir .local # encrypted dir for uploading to ACD
-# mkdir local # decrypted dir for uploading to ACD
-# mkdir media # Fusion dir that shows both local and mounted acd files. Point Plex to this dir
+# mkdir .local_acd # encrypted dir for uploading to ACD
+# mkdir local_acd # decrypted dir for uploading to ACD
+# mkdir media # Fusion dir that shows both local_acd and mounted acd files. Point Plex to this dir
 
 - name: unmount encfs directories
   shell: |
     /bin/fusermount -uz /home/{{ plex.user }}/acd
     /bin/fusermount -uz /home/{{ plex.user }}/.acd
-    /bin/fusermount -uz /home/{{ plex.user }}/local
-    /bin/fusermount -uz /home/{{ plex.user }}/.local
+    /bin/fusermount -uz /home/{{ plex.user }}/local_acd
+    /bin/fusermount -uz /home/{{ plex.user }}/.local_acd
     /bin/fusermount -uz /home/{{ plex.user }}/media
   failed_when: false
 
@@ -23,8 +23,8 @@
   with_items:
     - .acd
     - acd
-    - .local
-    - local
+    - .local_acd
+    - local_acd
     - media
     - script
 
@@ -35,7 +35,14 @@
     owner: "{{ plex.user }}"
     group: "{{ plex.group }}"
     mode: 0700
-  tags: blaat
+
+- name: Create cron to mount ACD
+  cron:
+    name: "Mount encfs and rclone directories"
+    user: "{{ plex.user }}"
+    minute: "*"
+    hour: "*"
+    job: "/home/{{ plex.user }}/script/encfs_mount_acd.sh check"
 
 - name: Copy 'rclone copy to acd' script
   template:
@@ -44,14 +51,26 @@
     owner: "{{ plex.user }}"
     group: "{{ plex.group }}"
     mode: 0700
-  tags: blaat
+
+- name: Create encfs logging directories
+  file:
+    path: "/var/log/rclone"
+    owner: "{{ plex.user }}"
+    group: "{{ plex.group }}"
+    state: directory
+
+- cron:
+    name: SHELL
+    env: yes
+    value: /bin/bash
 
 - name: Create cron to ron rclone copy to acd
   cron:
     name: "rclone copy (upload) to acd"
-    minute: "0"
-    hour: "0"
-    job: "flock -n /home/{{ plex.user }}/script/rclone.lock -c /bin/sh /home/{{ plex.user }}/script/rclone_copy_acd.sh"
+    user: "{{ plex.user }}"
+    minute: "*"
+    hour: "*"
+    job: "flock -n /tmp/rclone.lock -c /home/{{ plex.user }}/script/rclone_copy_acd.sh"
 
 - name: Place encfs.xml file
   template:
@@ -74,3 +93,16 @@
   apt:
     name: unionfs-fuse
     state: present
+
+- name: Allow others to read and write to unionfs directory
+  lineinfile:
+    dest: /etc/fuse.conf
+    state: present
+    regexp: '^#user_allow_other\s'
+    line: 'user_allow_other'
+
+- name: Add the user to fuse group
+  user:
+    name: "{{ plex.user }}"
+    groups: fuse
+    append: yes

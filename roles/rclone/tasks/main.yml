@@ -62,6 +62,14 @@
     remote_src: true
   become: yes
 
+- name: create rclone log directory
+  file:
+    path: /var/log/rclone
+    state: directory
+    mode: 0775
+    owner: '{{ rclone_user }}'
+    group: '{{ rclone_user }}'
+
 - name: install rclone - install manpage
   shell: mandb
   become: yes
@@ -70,7 +78,7 @@
 - name: Copy rclone config
   template:
     src: rclone.conf.j2
-    dest: /root/.rclone.conf
-    owner: root
-    group: root
+    dest: "/home/{{ rclone_user }}/.rclone.conf"
+    owner: "{{ rclone_user }}"
+    group: "{{ rclone_user }}"
     mode: 0600

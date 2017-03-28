@@ -2,9 +2,13 @@
 
 set -ex
 
-rclone \
---transfers=16 \
---checkers=8 \
---drive-chunk-size=1024 \
---log-file /var/logs/rclone/rclone.$(date +%Y%m%d_%H%M%S).log \
-copy /tmp/testupload acd:/testfile/
+/usr/sbin/rclone \
+--transfers=300 \
+--checkers=300 \
+--delete-after \
+--min-age 5m \
+--exclude partial~ \
+--log-file /var/log/rclone/rclone_copy.$(date +%Y%m%d_%H%M%S).log \
+--verbose \
+--stats 5s \
+copy /home/{{ plex.user }}/.local_acd/ acd_de:/Plex

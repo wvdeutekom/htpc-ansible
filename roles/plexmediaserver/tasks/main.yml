@@ -48,12 +48,20 @@
     owner: root
     group: root
     mode: 664
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '16.04'
 
-- name: Enable plexmediaserver service at startup
+- name: Enable plexmediaserver service at startup (16.04)
   systemd:
     name: plexmediaserver
     enabled: yes
     daemon_reload: yes
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '16.04'
+
+- name: Enable plexmediaserver service at startup (14.04)
+  service:
+    name: plexmediaserver
+    enabled: yes
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '14.04'
 
 - name: Ufw open tcp ports
   ufw: rule=allow port={{ item }} proto=tcp

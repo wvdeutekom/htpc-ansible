@@ -10,3 +10,5 @@ logrotate_scripts:
         - compress
         - delaycompress
         - copytruncate
+
+rclone_user: plex
