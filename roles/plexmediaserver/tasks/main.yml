@@ -38,7 +38,6 @@
     mode: 0644
   become: yes
   become_method: sudo
-  tags: configplex
   notify: restart plex
 
 - name: Create plex systemctl service

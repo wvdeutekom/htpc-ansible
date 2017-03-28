@@ -15,8 +15,8 @@
 - group: name=admin system=yes
   tags: user
 
-- user: name=wijnand comment="Wijnand" uid=1109 password={{ encrypted_ssh_password }} shell="/bin/bash" state=present group=wijnand groups=admin append=yes generate_ssh_key=yes ssh_key_file="/home/wijnand/.ssh/id_rsa" ssh_key_type=rsa update_password=always
-  tags: user
+# - user: name=wijnand comment="Wijnand" uid=1109 password={{ encrypted_ssh_password }} shell="/bin/bash" state=present group=wijnand groups=admin append=yes generate_ssh_key=yes ssh_key_file="/home/wijnand/.ssh/id_rsa" ssh_key_type=rsa update_password=always
+#   tags: user
 
 - group: name=wijnand state=present
   tags: user

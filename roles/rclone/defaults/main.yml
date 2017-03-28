@@ -12,3 +12,4 @@ MAN_PAGES:
   GROUP: root
 
 rclone_user: plex
+rclone_group: plex

@@ -27,11 +27,11 @@
 
 
 - name: copy executable to home dir
-  shell: cp /tmp/syncthing-*{{syncthing_version}}/syncthing {{syncthing_home}}/bin/syncthing
+  shell: cp -f /tmp/syncthing-*{{syncthing_version}}/syncthing {{syncthing_home}}/bin/syncthing
   when: version|failed or version.stdout != "{{syncthing_version}}"
 
 - name: set ownership
-  file: path={{syncthing_home}} recurse=yes owner={{syncthing_user}} group={{syncthing_user}}
+  file: path={{syncthing_home}} recurse=no owner={{syncthing_user}} group={{syncthing_user}}
 
 - name: supervisor | install
   apt: pkg=supervisor state=present

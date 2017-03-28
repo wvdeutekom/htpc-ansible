@@ -9,6 +9,18 @@
   tags:
     - vars
 
+- name: Create rclone group
+  group:
+    name: "{{ rclone_group }}"
+    system: yes
+
+- name: Create rclone user
+  user:
+    name: "{{ rclone_user }}"
+    home: "/home/plex"
+    group: "{{ rclone_group }}"
+    system: yes
+
 - name: rclone - define tmpdir
   set_fact:
     rclone_setup_tmp_dir: "/tmp/rclone_setup"
@@ -68,7 +80,7 @@
     state: directory
     mode: 0775
     owner: '{{ rclone_user }}'
-    group: '{{ rclone_user }}'
+    group: '{{ rclone_group }}'
 
 - name: install rclone - install manpage
   shell: mandb
@@ -80,5 +92,5 @@
     src: rclone.conf.j2
     dest: "/home/{{ rclone_user }}/.rclone.conf"
     owner: "{{ rclone_user }}"
-    group: "{{ rclone_user }}"
+    group: "{{ rclone_group }}"
     mode: 0600

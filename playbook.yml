@@ -26,5 +26,8 @@
   vars_files: ["{{ vars_file }}"]
   roles:
     - { role: baserole, tags: baserole }
+    - { role: logrotate, tags: logrotate }
     - { role: rclone, tags: rclone }
+    - { role: rclone, tags: rclone }
+    - { role: plexmediaserver, install_plex: true, install_plexwatch: true, use_acd: yes, tags: plexmediaserver }
     - { role: syncthing, tags: syncthing }

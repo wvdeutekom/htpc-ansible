@@ -1,11 +1,13 @@
 ---
-- name: restart plex (ubuntu 16.04)
+# (ubuntu 16.04)
+- name: restart plex
   systemd:
     name: plexmediaserver
     state: restarted
     daemon_reload: yes
   when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '16.04'
 
-- name: restart plex (ubuntu 14.04)
+# (ubuntu 14.04)
+- name: restart plex
   service: name=plexmediaserver state=restarted
   when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '14.04'

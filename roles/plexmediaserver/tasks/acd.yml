@@ -101,6 +101,11 @@
     regexp: '^#user_allow_other\s'
     line: 'user_allow_other'
 
+- name: Create fuse group
+  group:
+    name: "fuse"
+    system: yes
+
 - name: Add the user to fuse group
   user:
     name: "{{ plex.user }}"
