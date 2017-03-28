@@ -9,5 +9,5 @@
 - include: host.yml
 - include: security.yml
 - include: timezone.yml
-- include: postfix.yml
+# - include: postfix.yml
 - include: logrotate.yml
