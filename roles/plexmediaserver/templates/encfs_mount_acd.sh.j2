@@ -1,0 +1,56 @@
+#!/bin/sh
+
+set -x
+
+
+
+check_mount () {
+    if [ -z "`mount | grep /home/{{ plex.user }}/.acd`" ]; then
+        echo ".acd not mounted, mounting now"
+        mount_acd
+    else
+        echo ".acd mounted, Nothing to do."
+        exit 0
+    fi
+}
+
+
+mount_acd () {
+    #Unmount any directories already mounted
+    /bin/fusermount -uz /home/{{ plex.user }}/acd
+    /bin/fusermount -uz /home/{{ plex.user }}/.acd
+    /bin/fusermount -uz /home/{{ plex.user }}/local_acd
+    /bin/fusermount -uz /home/{{ plex.user }}/.local_acd
+    /bin/fusermount -uz /home/{{ plex.user }}/media
+
+    #Mount ACD using rClone
+    /usr/sbin/rclone mount \
+                    --read-only \
+                    --allow-other \
+                    --max-read-ahead 14G \
+                    --acd-templink-threshold 0 \
+                    --stats 10s \
+                    --buffer-size 1G \
+                    -v \
+                    --log-file /var/log/rclone/rclone_mount.log \
+                    acd_de:Plex /home/{{ plex.user }}/.acd &
+
+    #Mount encryption over these folders
+    ENCFS6_CONFIG='/home/{{ plex.user }}/encfs_acd.xml' encfs --extpass="cat /home/{{ plex.user }}/encfs_acd_pass" /home/{{ plex.user }}/.acd /home/{{ plex.user }}/acd
+    ENCFS6_CONFIG='/home/{{ plex.user }}/encfs_acd.xml' encfs --extpass="cat /home/{{ plex.user }}/encfs_acd_pass" /home/{{ plex.user }}/.local_acd /home/{{ plex.user }}/local_acd
+
+    #Use union-fs to merge our remote and local directories
+    unionfs-fuse \
+        -o cow,allow_other,direct_io,auto_cache,sync_read \
+        /home/{{ plex.user }}/local_acd=RW:/home/{{ plex.user }}/acd=RO /home/{{ plex.user }}/media
+
+    exit 0
+}
+
+if [ "$1" = "check" ]; then
+    check_mount
+elif [ "$1" = "mount" ]; then
+    mount_acd
+else
+    echo "Please supply with 'mount' or 'check' parameter"
+fi

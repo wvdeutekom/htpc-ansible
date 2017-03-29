@@ -12,8 +12,8 @@
 - name: mount /mnt/hdd3 disk
   mount: name=/mnt/hdd3 src='UUID=24FC20B6FC208460' fstype=ntfs-3g opts=rw,user,nosuid,nodev state=present
 
-- name: mount /mnt/hdd4 disk
-  mount: name=/mnt/hdd4 src='UUID=361432ae-75d9-4435-bd9b-ba3df8b636c8' fstype=ext4 opts=noatime,data=writeback,nofail state=present
+# - name: mount /mnt/hdd4 disk
+#   mount: name=/mnt/hdd4 src='UUID=361432ae-75d9-4435-bd9b-ba3df8b636c8' fstype=ext4 opts=noatime,data=writeback,nofail state=present
 
 - name: copy GRUB config
   copy: src=grub dest=/etc/default/grub owner=root group=root mode="0644"

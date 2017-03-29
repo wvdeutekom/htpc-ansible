@@ -1,0 +1,14 @@
+#!/bin/sh
+
+set -ex
+
+/usr/sbin/rclone \
+--transfers=300 \
+--checkers=300 \
+--delete-after \
+--min-age 5m \
+--exclude partial~ \
+--log-file /var/log/rclone/rclone_copy.$(date +%Y%m%d_%H%M%S).log \
+--verbose \
+--stats 5s \
+move /home/{{ plex.user }}/.local_acd/ acd_de:/Plex

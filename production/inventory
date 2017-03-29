@@ -3,3 +3,9 @@ htpc-1 ansible_ssh_host=w.vdeute.com ansible_ssh_user=wijnand TTY=ttyS0 firewall
 
 [toaster]
 toaster ansible_ssh_host=136.144.132.92 ansible_ssh_user=wijnand TTY=ttyS0 firewall=ufw
+
+[plex]
+plex-test ansible_ssh_host=188.166.33.141 ansible_ssh_user=root TTY=ttyS0 firewall=ufw
+
+[vm]
+vm ansible_ssh_host=192.168.0.13 ansible_ssh_user=wijnand TTY=ttyS0 firewall=ufw

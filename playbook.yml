@@ -6,15 +6,18 @@
   roles:
     - { role: baserole, tags: baserole }
     - { role: ufw, tags: ufw }
+    - { role: encfs, tags: encfs }
+    - { role: logrotate, tags: logrotate }
     - { role: syncthing, syncthing_use_systemd: false, syncthing_use_supervisor: true, tags: syncthing }
     - { role: datadog, tags: datadog }
     - { role: vnc, tags: vnc }
     - { role: greyhole, tags: greyhole }
-    - { role: docker, docker-py: yes, tags: docker }
+    - { role: docker, dockerpy: yes, tags: docker }
     - { role: prometheus, prometheus_components: ["prometheus", "alertmanager"], prometheus_alertmanager_url: "http://localhost:9093/", tags: prometheus }
     - { role: sabnzbd, tags: sabnzbd }
     - { role: sonarr, tags: sonarr }
-    - { role: plexmediaserver, install_plex: false, install_plexwatch: true, tags: plexmediaserver }
+    - { role: rclone, tags: rclone }
+    - { role: plexmediaserver, install_plex: true, install_plexwatch: true, use_acd: yes, tags: plexmediaserver }
     - { role: kodi, tags: kodi }
 
 - hosts: toaster
@@ -23,4 +26,32 @@
   vars_files: ["{{ vars_file }}"]
   roles:
     - { role: baserole, tags: baserole }
+    - { role: logrotate, tags: logrotate }
+    - { role: rclone, tags: rclone }
+    - { role: rclone, tags: rclone }
+    - { role: plexmediaserver, install_plex: true, install_plexwatch: true, use_acd: yes, tags: plexmediaserver }
     - { role: syncthing, tags: syncthing }
+
+- hosts: plex
+  become: yes
+  become_method: sudo
+  vars_files: ["{{ vars_file }}"]
+  roles:
+    - { role: baserole, tags: baserole }
+    - { role: logrotate, tags: logrotate }
+    - { role: encfs, tags: encfs }
+    - { role: rclone, tags: rclone }
+    - { role: plexmediaserver, install_plex: true, install_plexwatch: true, use_acd: yes, tags: plexmediaserver }
+
+- hosts: vm
+  become: yes
+  become_method: sudo
+  vars_files: ["{{ vars_file }}"]
+  roles:
+    - { role: baserole, tags: baserole }
+    - { role: docker, dockerpy: yes, tags: docker }
+    - { role: logrotate, tags: logrotate }
+    - { role: encfs, tags: encfs }
+    - { role: rclone, tags: rclone }
+    - { role: nginx-reverse-proxy, tags: nginx }
+    - { role: plexmediaserver, install_plex: true, install_plexwatch: true, use_acd: true, tags: plexmediaserver }

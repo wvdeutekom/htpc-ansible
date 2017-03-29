@@ -2,41 +2,53 @@
 - name: docker repo requires https transport
   apt: pkg=apt-transport-https state=present update_cache=no
 
-- name: install apt-key docker
-  apt_key: keyserver="p80.pool.sks-keyservers.net" id="58118E89F3A912897C070ADBF76221572C52609D"
-
 - apt_repository: repo="deb https://get.docker.com/ubuntu docker main" state=absent
-- apt_repository: repo="deb https://apt.dockerproject.org/repo ubuntu-trusty main" state=present
-
 - apt: pkg=lxc-docker state=absent purge=yes
 
-- apt: pkg={{item}} state=present update_cache=yes
+  # Ubuntu 14.04
+- name: install apt-key docker
+  apt_key: keyserver="p80.pool.sks-keyservers.net" id="58118E89F3A912897C070ADBF76221572C52609D"
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '14.04'
+
+- name: Add the Docker repository to APT sources
+  apt_repository: repo="deb https://apt.dockerproject.org/repo ubuntu-trusty main" state=present
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '14.04'
+
+  # Ubuntu 16.04
+- name: install apt-key docker
+  apt_key: keyserver="p80.pool.sks-keyservers.net" id="58118E89F3A912897C070ADBF76221572C52609D"
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '16.04'
+
+- name: Add the Docker repository to APT sources
+  apt_repository: repo="deb https://apt.dockerproject.org/repo ubuntu-xenial main" state=present
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '16.04'
+
+- name: Install docker and dependencies
+  apt: pkg={{item}} state=present update_cache=yes
   with_items:
    - docker-engine
    - apparmor
 
-- user: name=wijnand groups=docker append=yes
+- name: add users to docker group
+  user: name={{ item }} groups=docker append=yes
+  with_items: "{{ docker.users }}"
+  tags: testdocker
 
 - service: name=docker state=started
 
 - include: docker-py.yml
-  when: docker-py
+  when: dockerpy
 
-- name: Create /home/wijnand/.docker directory
-  file: path=/home/wijnand/.docker state=directory
+- name: Create .docker directories for every docker user
+  file: path=/home/{{ item }}/.docker state=directory owner={{ item }} group={{ item }}
+  with_items: "{{ docker.users }}"
 
-- template: src=dockercfg.j2 dest=/home/wijnand/.docker/config.json mode=600 owner=wijnand group=wijnand
+- template: src=dockercfg.j2 dest=/home/{{ item }}/.docker/config.json mode=600 owner={{ item }} group={{ item }}
+  with_items: "{{ docker.users }}"
 
-- name: Add {{ ubuntu_user }} and datadog to docker group
-  user: name={{ item }} group=docker createhome=no state=present
-  with_items:
-    - "{{ ubuntu_user }}"
-    - "dd-agent"
-  tags: datadog
-
-- template: src=docker.datadog dest=/etc/dd-agent/conf.d/docker_daemon.yaml owner=dd-agent mode=0644
-  notify: restart datadog
-  tags: datadog
+# - template: src=docker.datadog dest=/etc/dd-agent/conf.d/docker_daemon.yaml owner=dd-agent mode=0644
+#   notify: restart datadog
+#   tags: datadog
 
 - name: start cAdvisor container
   become: yes

@@ -1,0 +1,15 @@
+---
+
+rclone_version: "1.36"
+gather_facts: no
+
+# Defaults in case no variables for OS are chosen
+PACKAGES:
+  - unzip
+
+MAN_PAGES:
+  OWNER: root
+  GROUP: root
+
+rclone_user: plex
+rclone_group: plex

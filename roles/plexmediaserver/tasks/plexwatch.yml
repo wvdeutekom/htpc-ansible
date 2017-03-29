@@ -1,47 +1,36 @@
 ---
-- name: Install plexWatch dependencies
-  apt: name={{ item }} state=present update_cache=yes
-  with_items:
-    - libwww-perl
-    - libxml-simple-perl
-    - libtime-duration-perl
-    - libtime-modules-perl
-    - libdbd-sqlite3-perl
-    - perl-doc
-    - libjson-perl
-    - libfile-readbackwards-perl
+- name: Create plexpy config/database dir
+  file:
+    path: /home/{{ plex.user }}/plexpy
+    state: directory
+    owner: "{{ plex.user }}"
+    group: "{{ plex.user }}"
+    mode: 0700
 
-- name: Create /opt/plexWatch directory
-  file: path=/opt/plexWatch state=directory owner={{ ubuntu_user }} group={{ ubuntu_user }}
+- name: Fetch user id
+  shell: "id -u {{ plex.user }}"
+  register: fetched_user_id
 
-- name: Copy plexWatch.pl to /opt/plexWatch/
-  copy: src=plexWatch.pl dest="/opt/plexWatch/plexWatch.pl" owner={{ ubuntu_user }} group={{ ubuntu_user }} mode="0755"
+- name: Fetch user group id
+  shell: "id -g {{ plex.user }}"
+  register: fetched_group_id
 
-- name: Copy plexWatch config to /opt/plexWatch/config.pl
-  template: src=plexwatch_config.conf.j2 dest="/opt/plexWatch/config.pl" owner={{ ubuntu_user }} group={{ ubuntu_user }} mode="0755"
-
-- name: Set plexWatch cronjob
-  cron: name="Run plexWatch" job="/opt/plexWatch/plexWatch.pl" state=present user={{ ubuntu_user }}
-
+# env PUID and PGID should use same user id
+# and group id as the user that mounted any data (media) volumes
 - name: start plexwatch container
   become: yes
-  become_user: "{{ ubuntu_user }}"
+  become_user: "{{ plex.user }}"
   docker:
-    name: plexwatch
-    image: "linuxserver/sonarr"
-    privileged: True
+    name: plexpy
+    image: "linuxserver/plexpy"
     state: reloaded
     pull: missing
     restart_policy: always
     ports:
-    - "{{ sonarr_ports }}"
+    - "{{ plexpy.ports }}{{ ':' }}8181"
     env:
-      PUID: 1109
-      PGID: 999
+      PUID: "{{ fetched_user_id.stdout }}"
+      PGID: "{{ fetched_group_id.stdout }}"
     volumes:
-    - "/dev/rtc:/dev/rtc:ro"
-    - "{{ mnt_series }}{{ ':' }}/tv"
-    - "{{ sonarr_datadir }}{{ ':' }}/config"
-    - "{{ sab_downloaddir }}{{ ':' }}/downloads"
-    links:
-    - "{{ sab_containername }}{{ ':' }}sabnzbd"
+    - "/var/lib/plexmediaserver/Library/Application Support/Plex Media Server/Logs{{ ':' }}/logs{{ ':' }}ro"
+    - "/home/{{ plex.user }}/plexpy/{{ ':' }}/config"
