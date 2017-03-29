@@ -1,4 +1,4 @@
 ---
 
-docker-py: false
+dockerpy: false
 dockercfg: false

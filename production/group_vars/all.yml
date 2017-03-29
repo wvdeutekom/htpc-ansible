@@ -5,6 +5,11 @@ htpc_environment: production
 ubuntu_user: wijnand
 
 # General docker
+docker:
+  users:
+    - wijnand
+    - plex
+
 mnt_series: /mnt/samba/Series
 
 # Sabnzbd
@@ -33,6 +38,10 @@ sonarr_port_external: 8989
 plex_download: "https://plex.tv/downloads/latest/1?channel=16&build=linux-ubuntu-x86_64&distro=ubuntu&X-Plex-Token={{ plex_token }}"
 plex_deb_path: /tmp/plexmediaserver.deb
 plex_application_support_dir: "/var/lib/plexmediaserver/Library/Application Support/Plex Media Server"
+
+# Plexpy
+plexpy:
+  ports: 8181
 
 # Kodi
 

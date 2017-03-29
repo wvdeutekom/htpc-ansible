@@ -1,5 +1,6 @@
 ---
-- template: src=mailname.j2 dest=/etc/mailname mode=0644
+- name: Set mailname template
+  template: src=mailname.j2 dest=/etc/mailname mode=0644
 
 - file: path=/etc/apt/apt.conf state=touch owner=root group=root mode=0644
   changed_when: False
