@@ -7,7 +7,7 @@
 - name: Create plex user
   user:
     name: "{{ plex.user }}"
-    home: "/home/plex"
+    home: "/home/{{ plex.user }}"
     group: "{{ plex.group }}"
     system: yes
 

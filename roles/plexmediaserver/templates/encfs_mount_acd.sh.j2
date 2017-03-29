@@ -5,7 +5,7 @@ set -x
 
 
 check_mount () {
-    if [ -z "`mount | grep /home/plex/.acd`" ]; then
+    if [ -z "`mount | grep /home/{{ plex.user }}/.acd`" ]; then
         echo ".acd not mounted, mounting now"
         mount_acd
     else
