@@ -65,19 +65,21 @@
 - name: Ufw open tcp ports
   ufw: rule=allow port={{ item }} proto=tcp
   with_items:
-    - 32400
-    - 32469
+    - 32400 #(for access to the Plex Media Server) [required]
+    - 32469 #(for access to the Plex DLNA Server)
     - 61636
+  tags: ufw
 
 - name: Ufw open udp ports
   ufw: rule=allow port={{ item }} proto=udp
   with_items:
-    - 32413
-    - 1900
-    - 32412
-    - 32410
-    - 32414
+    - 1900 #(for access to the Plex DLNA Server)
+    - 32410 #(for current GDM network discovery)
+    - 32412 #(for current GDM network discovery)
+    - 32413 #(for current GDM network discovery)
+    - 32414 #(for current GDM network discovery)
     - 65535
+  tags: ufw
 
 - include: acd.yml
   when: use_acd

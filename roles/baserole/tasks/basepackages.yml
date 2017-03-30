@@ -25,6 +25,7 @@
     - python-apt
     - python-pycurl
     - python-software-properties
+    - telnet
     - unattended-upgrades
     - unzip
   tags:
