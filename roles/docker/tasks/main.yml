@@ -42,7 +42,7 @@
   with_items: "{{ docker.users }}"
 
 - name: start docker service
-- service: name=docker state=started
+  service: name=docker state=started
 
 - include: docker-py.yml
   when: dockerpy

@@ -41,7 +41,7 @@ plex_application_support_dir: "/var/lib/plexmediaserver/Library/Application Supp
 
 # Plexpy
 plexpy:
-  ports: 8181
+  port: 8181
 
 # Kodi
 

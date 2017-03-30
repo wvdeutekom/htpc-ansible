@@ -27,10 +27,18 @@
     pull: missing
     restart_policy: always
     ports:
-    - "{{ plexpy.ports }}{{ ':' }}8181"
+    - "{{ plexpy.port }}{{ ':' }}8181"
     env:
       PUID: "{{ fetched_user_id.stdout }}"
       PGID: "{{ fetched_group_id.stdout }}"
     volumes:
     - "/var/lib/plexmediaserver/Library/Application Support/Plex Media Server/Logs{{ ':' }}/logs{{ ':' }}ro"
     - "/home/{{ plex.user }}/plexpy/{{ ':' }}/config"
+
+- name: ufw allow from home
+  ufw:
+    rule: allow
+    proto: tcp
+    src: 94.210.148.192
+    port: "{{ plexpy.port }}"
+  tags: ufw
