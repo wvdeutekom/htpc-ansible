@@ -1,6 +1,12 @@
 ---
 - name: restart ssh
   service: name=ssh state=restarted
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '14.04'
+
+- name: restart ssh
+  systemd: name=ssh state=restarted
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '16.04'
+
 - name: reload monit configuration
   service: name=monit state=reloaded
 - name: reload firewalld configuration
