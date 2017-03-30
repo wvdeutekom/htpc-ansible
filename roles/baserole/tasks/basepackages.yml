@@ -19,16 +19,12 @@
     - lldpd
     - lsof
     - make
-    - mercurial
-    - mercurial-common
     - monit
     - moreutils
     - ntp
     - python-apt
     - python-pycurl
     - python-software-properties
-    - supervisor
-    - tshark
     - unattended-upgrades
     - unzip
   tags:

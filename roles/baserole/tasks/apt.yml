@@ -1,18 +1,8 @@
 ---
 
-# For use with https://github.com/bcantoni/vagrant-deb-proxy
-# - name: install squid-deb-proxy-client
-#   apt: pkg=squid-deb-proxy-client state=present update_cache=yes
-#   when: htpc_environment == 'development'
-
-# - name: Place vagrant squid-proxy in /etc/apt/apt.conf.d/30autoproxy
-#   copy: >
-#     src=squid_proxy dest=/etc/apt/apt.conf.d/30autoproxy
-#       owner=root group=root mode=0644
-#   when: htpc_environment == 'development'
-
 - name: install python 2
   raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+  changed_when: false
 
 - name: Place unattended upgrades config (sifter 3580)
   template: >

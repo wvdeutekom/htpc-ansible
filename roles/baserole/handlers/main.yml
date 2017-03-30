@@ -7,8 +7,6 @@
   service: name=firewalld state=reloaded
 - name: update tzdata
   command: /usr/sbin/dpkg-reconfigure --frontend noninteractive tzdata
-- name: restart postfix
-  service: name=postfix state=restarted enabled=yes
 - name: restart lldpd
   service: name=lldpd state=restarted enabled=yes
 - name: update aliases
