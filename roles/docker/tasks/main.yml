@@ -29,11 +29,19 @@
    - docker-engine
    - apparmor
 
+- name: Set docker daemon config
+  copy:
+    src: docker_daemon.json
+    dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+  notify: restart docker
+
 - name: add users to docker group
   user: name={{ item }} groups=docker append=yes
   with_items: "{{ docker.users }}"
-  tags: testdocker
 
+- name: start docker service
 - service: name=docker state=started
 
 - include: docker-py.yml
@@ -45,10 +53,6 @@
 
 - template: src=dockercfg.j2 dest=/home/{{ item }}/.docker/config.json mode=600 owner={{ item }} group={{ item }}
   with_items: "{{ docker.users }}"
-
-# - template: src=docker.datadog dest=/etc/dd-agent/conf.d/docker_daemon.yaml owner=dd-agent mode=0644
-#   notify: restart datadog
-#   tags: datadog
 
 - name: start cAdvisor container
   become: yes

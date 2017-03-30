@@ -1,0 +1,9 @@
+---
+
+- name: restart docker
+  systemd: name=docker status=restarted
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '16.04'
+
+- name: restart docker
+  service: name=docker status=restarted
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '14.04'
