@@ -1,14 +1,10 @@
 ---
-- name: set /etc/localtime to UTC
-  file: src=/usr/share/zoneinfo/Universal dest=/etc/localtime state=link force=yes
+- name: set /etc/localtime to Europe/Amsterdam
+  file: src=/usr/share/zoneinfo/Europe/Amsterdam dest=/etc/localtime state=link force=yes
 
-- name: set /etc/timezone to UTC
-  copy: 
+- name: set /etc/timezone to Europe/Amsterdam
+  copy:
    content: |
-     Etc/UTC
+     Europe/Amsterdam
    dest: /etc/timezone
   notify: update tzdata
-
-#- name: set /etc/timezone to UTC
-#  copy: src=timezone dest=/etc/timezone
-#  notify: update tzdata
