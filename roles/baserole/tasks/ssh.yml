@@ -14,20 +14,20 @@
 
 - name: Create group for main user
   group:
-    name: wijnand
+    name: "{{ ubuntu_user }}"
 
 - name: Create main user
   user:
-    name: wijnand
+    name: "{{ ubuntu_user }}"
     shell: "/bin/bash"
     group: admin
-    groups: wijnand
+    groups: "{{ ubuntu_user }}"
     append: yes
     password: "{{ encrypted_ssh_password }}"
     update_password: always
     generate_ssh_key: yes
     ssh_key_type: rsa
-    ssh_key_file: "/home/wijnand/.ssh/id_rsa"
+    ssh_key_file: "/home/{{ ubuntu_user }}/.ssh/id_rsa"
   tags: user
 
 # - user: name=wijnand comment="Wijnand" uid=1109 password={{ encrypted_ssh_password }} shell="/bin/bash" state=present group=wijnand groups=admin append=yes generate_ssh_key=yes ssh_key_file="/home/wijnand/.ssh/id_rsa" ssh_key_type=rsa update_password=always
@@ -37,11 +37,11 @@
   copy: src=sudoers dest=/etc/sudoers
   tags: sudo
 
-- name: SSH folder voor wijnand
-  file: path="/home/wijnand/.ssh" state=directory group="wijnand" owner="wijnand" mode="0700"
+- name: SSH folder voor {{ ubuntu_user }}
+  file: path="/home/{{ ubuntu_user }}/.ssh" state=directory group="{{ ubuntu_user }}" owner="{{ ubuntu_user }}" mode="0700"
 
-- name: SSH Authorized_keys voor wijnand
-  copy: src=authorized_keys dest=/home/wijnand/.ssh/authorized_keys  group="wijnand" owner="wijnand" mode="0600"
+- name: SSH Authorized_keys voor {{ ubuntu_user }}
+  copy: src=authorized_keys dest="/home/{{ ubuntu_user }}/.ssh/authorized_keys"  group="{{ ubuntu_user }}" owner="{{ ubuntu_user }}" mode="0600"
 
 - name: Enable SSHD
   service: name=ssh enabled=yes
