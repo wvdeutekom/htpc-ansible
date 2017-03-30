@@ -32,13 +32,14 @@
     - { role: plexmediaserver, install_plex: true, install_plexwatch: true, use_acd: yes, tags: plexmediaserver }
     - { role: syncthing, tags: syncthing }
 
-- hosts: plex
+- hosts: logan
   become: yes
   become_method: sudo
   vars_files: ["{{ vars_file }}"]
   roles:
     - { role: baserole, tags: baserole }
     - { role: logrotate, tags: logrotate }
+    - { role: docker, dockerpy: yes, tags: docker }
     - { role: encfs, tags: encfs }
     - { role: rclone, tags: rclone }
     - { role: plexmediaserver, install_plex: true, install_plexwatch: true, use_acd: yes, tags: plexmediaserver }
